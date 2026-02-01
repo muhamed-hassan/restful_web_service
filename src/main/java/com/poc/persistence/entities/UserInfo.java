@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,18 +28,11 @@ public class UserInfo {
 	@Column(name = "date_of_birth")
 	private Date dateOfBirth;
 	
-	@Column(name = "cell_phone")
-	private String cellPhone;
-		
-	private String email;
+	@Embedded
+	private ContactInfo contactInfo;
 	
-	@Column(name = "mailing_address")
-	private String mailingAddress;
-	
-	@Column(name = "account_number")
-	private String accountNumber;	
-	
-	private float balance;
+	@Embedded
+	private BankAccountInfo bankAccountInfo;
 
 	@Version
 	private int version;
@@ -75,44 +69,20 @@ public class UserInfo {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public String getCellPhone() {
-		return cellPhone;
+	public ContactInfo getContactInfo() {
+		return contactInfo;
 	}
 
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
+	public void setContactInfo(ContactInfo contactInfo) {
+		this.contactInfo = contactInfo;
 	}
 
-	public String getEmail() {
-		return email;
+	public BankAccountInfo getBankAccountInfo() {
+		return bankAccountInfo;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}	
-
-	public String getMailingAddress() {
-		return mailingAddress;
-	}
-
-	public void setMailingAddress(String mailingAddress) {
-		this.mailingAddress = mailingAddress;
-	}
-	
-	public String getAccountNumber() {
-		return accountNumber;
-	}
-
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-
-	public float getBalance() {
-		return balance;
-	}
-
-	public void setBalance(float balance) {
-		this.balance = balance;
+	public void setBankAccountInfo(BankAccountInfo bankAccountInfo) {
+		this.bankAccountInfo = bankAccountInfo;
 	}
 
 	public int getVersion() {

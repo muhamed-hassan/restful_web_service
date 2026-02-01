@@ -41,7 +41,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Object> createUserInfo(@RequestBody UserInfoCreateModel userInfoCreateModel) {
 		
-		validator.validate(userInfoCreateModel);	
+		validator.validateUserInfoCreateModel(userInfoCreateModel);	
 		
 		userService.createUserInfo(userInfoCreateModel);
 		
@@ -59,12 +59,12 @@ public class UserController {
 		DetailedUserInfoReadModel userInfoReadModel = new DetailedUserInfoReadModel();
 		userInfoReadModel.setName(userInfo.getName());		
 		userInfoReadModel.setNationalId(userInfo.getNationalId());
-		userInfoReadModel.setDateOfBirth(dateFormat.format(userInfo.getDateOfBirth()));
-		userInfoReadModel.setCellPhone(userInfo.getCellPhone());
-		userInfoReadModel.setEmail(userInfo.getEmail());
-		userInfoReadModel.setMailingAddress(userInfo.getMailingAddress());
-		userInfoReadModel.setIban(toIban(ibanConfigs, userInfo.getAccountNumber()));
-		userInfoReadModel.setBalance(userInfo.getBalance());
+		userInfoReadModel.setDateOfBirth(dateFormat.format(userInfo.getDateOfBirth()));		
+		userInfoReadModel.setCellPhone(userInfo.getContactInfo().getCellPhone());
+		userInfoReadModel.setEmail(userInfo.getContactInfo().getEmail());
+		userInfoReadModel.setMailingAddress(userInfo.getContactInfo().getMailingAddress());
+		userInfoReadModel.setIban(toIban(ibanConfigs, userInfo.getBankAccountInfo().getAccountNumber()));
+		userInfoReadModel.setBalance(userInfo.getBankAccountInfo().getBalance());
 		
 		return new ResponseEntity<DetailedUserInfoReadModel>(userInfoReadModel, HttpStatus.OK);
 	}
@@ -72,7 +72,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
 	public ResponseEntity<Object> updateUserInfo(@PathVariable int id, @RequestBody UserInfoUpdateModel userInfoUpdateModel) {
 
-		validator.validate(userInfoUpdateModel);
+		validator.validateUserInfoUpdateModel(userInfoUpdateModel);
 		
 		userService.updateUserInfo(id, userInfoUpdateModel);
 		
@@ -103,8 +103,8 @@ public class UserController {
 			userInfoReadModel.setId(currentElement.getId());
 			userInfoReadModel.setName(currentElement.getName());
 			userInfoReadModel.setNationalId(currentElement.getNationalId());
-			userInfoReadModel.setIban(toIban(ibanConfigs, currentElement.getAccountNumber()));
-			userInfoReadModel.setBalance(currentElement.getBalance());
+			userInfoReadModel.setIban(toIban(ibanConfigs, currentElement.getBankAccountInfo().getAccountNumber()));
+			userInfoReadModel.setBalance(currentElement.getBankAccountInfo().getBalance());
 			
 			userInfoReadModels.add(userInfoReadModel);
 		}

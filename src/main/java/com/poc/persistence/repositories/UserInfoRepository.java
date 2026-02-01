@@ -15,7 +15,9 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
 	
 	@Modifying
     @Query("UPDATE UserInfo userInfo "
-    		+ "SET userInfo.cellPhone = :cellPhoneParam, userInfo.email = :emailParam, userInfo.mailingAddress = :mailingAddressParam "
+    		+ "SET userInfo.contactInfo.cellPhone = :cellPhoneParam, "
+    		+ "    userInfo.contactInfo.email = :emailParam, "
+    		+ "    userInfo.contactInfo.mailingAddress = :mailingAddressParam "
     		+ "WHERE userInfo.id = :idParam")
 	public int updateUserInfo(@Param("cellPhoneParam") String cellPhoneParam, @Param("emailParam") String emailParam,
 								@Param("mailingAddressParam") String mailingAddressParam, @Param("idParam") int idParam);

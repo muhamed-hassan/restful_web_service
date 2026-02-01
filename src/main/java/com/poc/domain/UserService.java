@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.poc.domain.exceptions.DataNotFoundException;
+import com.poc.persistence.entities.BankAccountInfo;
+import com.poc.persistence.entities.ContactInfo;
 import com.poc.persistence.entities.IbanConfigs;
 import com.poc.persistence.entities.UserInfo;
 import com.poc.persistence.repositories.IbanConfigsRepository;
@@ -40,11 +42,13 @@ public class UserService {
 		
 		UserInfo userInfo = new UserInfo();
 		userInfo.setName(userInfoCreateModel.getName());
-		userInfo.setNationalId(userInfoCreateModel.getNationalId());						
-		userInfo.setCellPhone(userInfoCreateModel.getCellPhone());
-		userInfo.setEmail(userInfoCreateModel.getEmail());
-		userInfo.setMailingAddress(userInfoCreateModel.getMailingAddress());
-		userInfo.setBalance(0);
+		userInfo.setNationalId(userInfoCreateModel.getNationalId());
+		
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setCellPhone(userInfoCreateModel.getCellPhone());		
+		contactInfo.setEmail(userInfoCreateModel.getEmail());
+		contactInfo.setMailingAddress(userInfoCreateModel.getMailingAddress());
+		userInfo.setContactInfo(contactInfo);
 		
 		try {
 			userInfo.setDateOfBirth(dateFormat.parse(userInfoCreateModel.getDateOfBirth()));
@@ -52,11 +56,14 @@ public class UserService {
 			throw new IllegalArgumentException(e.getMessage());
 		}
 				
+		BankAccountInfo bankAccountInfo = new BankAccountInfo();
 		Random random = new Random(System.currentTimeMillis());        
 		long generatedNumber = Math.abs(random.nextLong());		        
 		String generatedNumberString = generatedNumber + "";
 		String accountNumber = generatedNumberString.substring(0, 8);
-		userInfo.setAccountNumber(accountNumber);
+		bankAccountInfo.setAccountNumber(accountNumber);
+		bankAccountInfo.setBalance(0);
+		userInfo.setBankAccountInfo(bankAccountInfo);
 		
 		userInfoRepository.save(userInfo);
 	}

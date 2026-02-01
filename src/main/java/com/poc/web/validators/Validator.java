@@ -9,7 +9,7 @@ import com.poc.web.models.UserInfoUpdateModel;
 @Component
 public class Validator {
 		
-	public void validate(UserInfoCreateModel userInfoCreateModel) {
+	public void validateUserInfoCreateModel(UserInfoCreateModel userInfoCreateModel) {
 		
 		String name = userInfoCreateModel.getName();
 		if (name == null) {
@@ -34,7 +34,7 @@ public class Validator {
 		validateMailingAddress(userInfoCreateModel.getMailingAddress());
 	}	
 	
-	public void validate(UserInfoUpdateModel userInfoUpdateModel) {
+	public void validateUserInfoUpdateModel(UserInfoUpdateModel userInfoUpdateModel) {
 		
 		validateNationalId(userInfoUpdateModel.getNationalId());
 		
