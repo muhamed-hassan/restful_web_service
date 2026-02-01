@@ -45,10 +45,7 @@ public class Validator {
 		validateMailingAddress(userInfoUpdateModel.getMailingAddress());
 	}
 	
-	/* *************************************************************************************************** */
-	/* *************************************************************************************************** */
-	
-	private void validateNationalId(String nationalId) {
+	public void validateNationalId(String nationalId) {
 		
 		if (nationalId == null) {
 			throw new IllegalArgumentException("nationalId is required");
@@ -58,6 +55,9 @@ public class Validator {
 			throw new IllegalArgumentException("nationalId contains invalid characters and shall contain 14 digits only");
 		}
 	}
+	
+	/* *************************************************************************************************** */
+	/* *************************************************************************************************** */
 	
 	private void validateCellPhone(String cellPhone) {
 		

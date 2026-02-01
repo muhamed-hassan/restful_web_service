@@ -1,5 +1,7 @@
 package com.poc.domain;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.poc.domain.exceptions.DataNotFoundException;
-import com.poc.persistence.entities.Currency;
 import com.poc.persistence.entities.IbanConfigs;
-import com.poc.persistence.entities.MasterAccount;
 import com.poc.persistence.entities.UserInfo;
-import com.poc.persistence.repositories.CurrencyRepository;
 import com.poc.persistence.repositories.IbanConfigsRepository;
-import com.poc.persistence.repositories.MasterAccountRepository;
 import com.poc.persistence.repositories.UserInfoRepository;
+import com.poc.web.models.UserInfoCreateModel;
 import com.poc.web.models.UserInfoUpdateModel;
 
 @Service
@@ -28,46 +27,48 @@ public class UserService {
 	private IbanConfigsRepository ibanConfigsRepository;
 	
 	@Autowired
-	private MasterAccountRepository masterAccountRepository;
-	
-	@Autowired
 	private UserInfoRepository userInfoRepository;
-	
-	@Autowired
-	private CurrencyRepository currencyRepository;
 	
 	@Value("${page.size}")
     private int pageSize;
 	
+	@Autowired
+	private DateFormat dateFormat;
+	
 	@Transactional
-	public void createUserInfo(UserInfo userInfo) {
+	public void createUserInfo(UserInfoCreateModel userInfoCreateModel) {
 		
-		userInfo = userInfoRepository.save(userInfo);
+		UserInfo userInfo = new UserInfo();
+		userInfo.setName(userInfoCreateModel.getName());
+		userInfo.setNationalId(userInfoCreateModel.getNationalId());						
+		userInfo.setCellPhone(userInfoCreateModel.getCellPhone());
+		userInfo.setEmail(userInfoCreateModel.getEmail());
+		userInfo.setMailingAddress(userInfoCreateModel.getMailingAddress());
+		userInfo.setBalance(0);
 		
-		Currency gbp = currencyRepository.findByCode("GBP");
-		
-		MasterAccount masterAccount = new MasterAccount();
-		masterAccount.setUserInfo(userInfo);
-		masterAccount.setBalance(0);
-		masterAccount.setCurrency(gbp);
-		
+		try {
+			userInfo.setDateOfBirth(dateFormat.parse(userInfoCreateModel.getDateOfBirth()));
+		} catch (ParseException e) {
+			throw new IllegalArgumentException(e.getMessage());
+		}
+				
 		Random random = new Random(System.currentTimeMillis());        
 		long generatedNumber = Math.abs(random.nextLong());		        
 		String generatedNumberString = generatedNumber + "";
 		String accountNumber = generatedNumberString.substring(0, 8);
-		masterAccount.setAccountNumber(accountNumber);
+		userInfo.setAccountNumber(accountNumber);
 		
-		masterAccountRepository.save(masterAccount);
+		userInfoRepository.save(userInfo);
 	}
 	
-	public MasterAccount getUserInfoByNationalId(String nationalId) {
+	public UserInfo getUserInfoByNationalId(String nationalId) {
 		
-		MasterAccount masterAccount = masterAccountRepository.getByNationalId(nationalId);
-		if (masterAccount == null) {
+		UserInfo userInfo = userInfoRepository.findByNationalId(nationalId);
+		if (userInfo == null) {
 			throw new DataNotFoundException();
 		}		
 		
-		return masterAccount;
+		return userInfo;
 	}
 	
 	@Transactional
@@ -80,13 +81,13 @@ public class UserService {
 	@Transactional
 	public void removeUserInfo(int id) {	
 		
-		masterAccountRepository.delete(id);
+		userInfoRepository.delete(id);
 	}
 	
-	public Page<MasterAccount> getPageOfUserInfo(int pageIndex) {
+	public Page<UserInfo> getPageOfUserInfo(int pageIndex) {
 		
 		Pageable pageRequest = new PageRequest(pageIndex, pageSize);
-		Page<MasterAccount> page = masterAccountRepository.findAll(pageRequest);
+		Page<UserInfo> page = userInfoRepository.findAll(pageRequest);
 		
 		if (!page.hasContent()) {
 			throw new DataNotFoundException();

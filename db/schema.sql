@@ -1,4 +1,4 @@
--- Run using MySQL command
+
 CREATE SCHEMA `bank_crud_example`;
 
 USE bank_crud_example;
@@ -15,13 +15,6 @@ CREATE TABLE `iban_configs` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `currency` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `code` char(3) NOT NULL,
-  PRIMARY KEY (`id`),  
-  UNIQUE KEY `code_UQ` (`code`)
-);
-
 CREATE TABLE `user_info` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(250) NOT NULL,
@@ -30,21 +23,12 @@ CREATE TABLE `user_info` (
   `cell_phone` char(11) NOT NULL,
   `email` varchar(50) NOT NULL,
   `mailing_address` varchar(250) NOT NULL,
+  `account_number` varchar(8) NOT NULL,
+  `balance` float unsigned NOT NULL,
   `version` int unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `national_id_UQ` (`national_id`),
   UNIQUE KEY `cell_phone_UQ` (`cell_phone`),
-  UNIQUE KEY `email_UQ` (`email`)
-);
-
-CREATE TABLE `master_account` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `account_number` varchar(8) NOT NULL,
-  `balance` float unsigned NOT NULL,
-  `currency_id` int unsigned NOT NULL,
-  `user_id` int unsigned NOT NULL,
-  PRIMARY KEY (`id`),  
   UNIQUE KEY `account_number_UQ` (`account_number`),
-  FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+  UNIQUE KEY `email_UQ` (`email`)
 );

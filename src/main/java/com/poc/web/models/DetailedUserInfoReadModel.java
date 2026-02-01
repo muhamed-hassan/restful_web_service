@@ -11,9 +11,7 @@ public class DetailedUserInfoReadModel extends UserInfoModel {
 	private String iban;
 	
 	private float balance;
-	
-	private String currency;
-	
+		
 	public int getId() {
 		return id;
 	}
@@ -53,13 +51,5 @@ public class DetailedUserInfoReadModel extends UserInfoModel {
 	public void setBalance(float balance) {
 		this.balance = balance;
 	}
-
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}	
 	
 }

@@ -2,7 +2,7 @@ package com.poc.web.models;
 
 import java.util.HashSet;
 
-public class PageOfMasterAccounts {
+public class PageOfUserInfo {
 	
 	private HashSet<BriefUserInfoReadModel> data;
 	

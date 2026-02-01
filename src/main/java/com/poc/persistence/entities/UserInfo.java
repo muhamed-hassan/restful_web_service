@@ -1,6 +1,7 @@
 package com.poc.persistence.entities;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +34,11 @@ public class UserInfo {
 	
 	@Column(name = "mailing_address")
 	private String mailingAddress;
+	
+	@Column(name = "account_number")
+	private String accountNumber;	
+	
+	private float balance;
 
 	@Version
 	private int version;
@@ -92,6 +98,22 @@ public class UserInfo {
 	public void setMailingAddress(String mailingAddress) {
 		this.mailingAddress = mailingAddress;
 	}
+	
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public float getBalance() {
+		return balance;
+	}
+
+	public void setBalance(float balance) {
+		this.balance = balance;
+	}
 
 	public int getVersion() {
 		return version;
@@ -99,6 +121,26 @@ public class UserInfo {
 
 	public void setVersion(int version) {
 		this.version = version;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (getClass() != object.getClass()) {
+			return false;
+		}
+		UserInfo other = (UserInfo) object;
+		return id == other.getId();
 	}
 	
 }
