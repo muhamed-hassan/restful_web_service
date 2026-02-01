@@ -1,5 +1,7 @@
 package com.poc.persistence.entities;
 
+import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -76,12 +78,32 @@ public class MasterAccount {
 		this.userInfo = userInfo;
 	}	
 	
-	public void toIban(IbanConfigs ibanConfigs) {		
-		this.iban = ibanConfigs.getCountryCode() + ibanConfigs.getCheckDigits() + ibanConfigs.getBankCode() + ibanConfigs.getSortCode() + accountNumber;
-	}
-	
 	public String getIban() {
 		return iban;
+	}
+	
+	public void setIban(String iban) {
+		this.iban = iban;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null) {
+			return false;
+		}
+		if (getClass() != object.getClass()) {
+			return false;
+		}
+		MasterAccount other = (MasterAccount) object;
+		return id == other.getId();
 	}
 	
 }

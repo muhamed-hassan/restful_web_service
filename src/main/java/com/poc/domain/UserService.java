@@ -1,9 +1,11 @@
 package com.poc.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,9 @@ import com.poc.persistence.repositories.CurrencyRepository;
 import com.poc.persistence.repositories.IbanConfigsRepository;
 import com.poc.persistence.repositories.MasterAccountRepository;
 import com.poc.persistence.repositories.UserInfoRepository;
-import com.poc.web.error_handler.exceptions.NoDataFoundException;
+import com.poc.web.error_handler.exceptions.DataNotFoundException;
+import com.poc.web.models.BriefUserInfoReadModel;
+import com.poc.web.models.PageOfMasterAccounts;
 import com.poc.web.models.UserInfoUpdateModel;
 
 @Service
@@ -60,11 +64,11 @@ public class UserService {
 		
 		MasterAccount masterAccount = masterAccountRepository.getByNationalId(nationalId);
 		if (masterAccount == null) {
-			throw new NoDataFoundException();
+			throw new DataNotFoundException();
 		}		
 		
 		IbanConfigs ibanConfigs = ibanConfigsRepository.findOne(1);
-		masterAccount.toIban(ibanConfigs);
+		masterAccount.setIban(toIban(ibanConfigs, masterAccount.getAccountNumber()));
 		
 		return masterAccount;
 	}
@@ -88,24 +92,50 @@ public class UserService {
 		masterAccountRepository.delete(masterAccount);
 	}
 	
-	public List<MasterAccount> getUsers(int pageIndex) {
+	public PageOfMasterAccounts getUsers(int pageIndex) {
 		
 		IbanConfigs ibanConfigs = ibanConfigsRepository.findOne(1);
 		
 		int pageSize = 10;
 		Pageable pageRequest = new PageRequest(pageIndex, pageSize);
-		List<MasterAccount> page = masterAccountRepository.findAll(pageRequest).getContent();
+		Page<MasterAccount> page = masterAccountRepository.findAll(pageRequest);
 		
-		if (page.isEmpty()) {
-			throw new NoDataFoundException();
+		if (!page.hasContent()) {
+			throw new DataNotFoundException();
 		}
 		
-		for (int cursor = 0; cursor < page.size(); cursor++) {
-			MasterAccount currentElement = page.get(cursor);
-			currentElement.toIban(ibanConfigs);
+		List<MasterAccount> content = page.getContent();
+		ArrayList<BriefUserInfoReadModel> userInfoReadModels = new ArrayList<BriefUserInfoReadModel>();
+		for (int cursor = 0; cursor < content.size(); cursor++) {
+			
+			MasterAccount currentElement = content.get(cursor);
+			
+			currentElement.setIban(toIban(ibanConfigs, currentElement.getAccountNumber()));
+			
+			BriefUserInfoReadModel userInfoReadModel = new BriefUserInfoReadModel();
+			userInfoReadModel.setId(currentElement.getId());
+			userInfoReadModel.setName(currentElement.getUserInfo().getName());
+			userInfoReadModel.setNationalId(currentElement.getUserInfo().getNationalId());
+			userInfoReadModel.setIban(currentElement.getIban());
+			userInfoReadModel.setBalance(currentElement.getBalance());
+			
+			userInfoReadModels.add(userInfoReadModel);
 		}
 		
-		return page;
+		PageOfMasterAccounts pageOfMasterAccounts = new PageOfMasterAccounts();
+		pageOfMasterAccounts.setData(userInfoReadModels);
+		pageOfMasterAccounts.setTotalElements((int) page.getTotalElements());
+		pageOfMasterAccounts.setTotalPages(page.getTotalPages());
+		pageOfMasterAccounts.setFirstPage(page.isFirstPage());
+		pageOfMasterAccounts.setLastPage(page.isLastPage());
+		
+		return pageOfMasterAccounts;
 	}
 	
+	private String toIban(IbanConfigs ibanConfigs, String accountNumber) {
+		
+		return ibanConfigs.getCountryCode() + ibanConfigs.getCheckDigits() + ibanConfigs.getBankCode() + 
+				ibanConfigs.getSortCode() + accountNumber;
+	}
+
 }

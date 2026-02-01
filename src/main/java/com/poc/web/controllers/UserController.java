@@ -2,8 +2,6 @@ package com.poc.web.controllers;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poc.domain.UserService;
-import com.poc.web.models.UserInfoCreateModel;
-import com.poc.web.models.DetailedUserInfoReadModel;
-import com.poc.web.models.BriefUserInfoReadModel;
-import com.poc.web.models.UserInfoUpdateModel;
-import com.poc.web.validators.Validator;
 import com.poc.persistence.entities.MasterAccount;
 import com.poc.persistence.entities.UserInfo;
+import com.poc.web.models.DetailedUserInfoReadModel;
+import com.poc.web.models.PageOfMasterAccounts;
+import com.poc.web.models.UserInfoCreateModel;
+import com.poc.web.models.UserInfoUpdateModel;
+import com.poc.web.validators.Validator;
 
-@RequestMapping("v1/users")
+@RequestMapping("users")
 @RestController
 public class UserController {
 	
@@ -92,28 +90,13 @@ public class UserController {
 		
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<ArrayList<BriefUserInfoReadModel>> getUsers(@RequestParam int pageIndex) {
+	public ResponseEntity<PageOfMasterAccounts> getUsers(@RequestParam int pageIndex) {
 			
-		List<MasterAccount> masterAccounts = userService.getUsers(pageIndex);
+		PageOfMasterAccounts pageOfMasterAccounts = userService.getUsers(pageIndex);
 		
-		ArrayList<BriefUserInfoReadModel> userInfoReadModels = new ArrayList<BriefUserInfoReadModel>();
-		for (int cursor = 0; cursor < masterAccounts.size(); cursor++) {
-			
-			MasterAccount currentElement = masterAccounts.get(cursor);
-			
-			BriefUserInfoReadModel userInfoReadModel = new BriefUserInfoReadModel();
-			userInfoReadModel.setId(currentElement.getId());
-			userInfoReadModel.setName(currentElement.getUserInfo().getName());
-			userInfoReadModel.setNationalId(currentElement.getUserInfo().getNationalId());
-			userInfoReadModel.setIban(currentElement.getIban());
-			userInfoReadModel.setBalance(currentElement.getBalance());
-			
-			userInfoReadModels.add(userInfoReadModel);
-		}		
-		
-		return new ResponseEntity<ArrayList<BriefUserInfoReadModel>>(userInfoReadModels, HttpStatus.OK);
+		return new ResponseEntity<PageOfMasterAccounts>(pageOfMasterAccounts, HttpStatus.OK);
 	}
 	
 }
