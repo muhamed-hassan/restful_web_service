@@ -1,4 +1,4 @@
-package com.poc.web.error_handler.exceptions;
+package com.poc.domain.exceptions;
 
 public class DataNotFoundException extends RuntimeException {
 

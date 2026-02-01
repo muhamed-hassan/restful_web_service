@@ -1,10 +1,10 @@
 package com.poc.web.models;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PageOfMasterAccounts {
 	
-	private ArrayList<BriefUserInfoReadModel> data;
+	private HashSet<BriefUserInfoReadModel> data;
 	
 	private int totalElements;
 	
@@ -14,11 +14,11 @@ public class PageOfMasterAccounts {
 	
 	private boolean lastPage;
 
-	public ArrayList<BriefUserInfoReadModel> getData() {
+	public HashSet<BriefUserInfoReadModel> getData() {
 		return data;
 	}
 
-	public void setData(ArrayList<BriefUserInfoReadModel> data) {
+	public void setData(HashSet<BriefUserInfoReadModel> data) {
 		this.data = data;
 	}
 

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.poc.web.error_handler.exceptions.DataNotFoundException;
+import com.poc.domain.exceptions.DataNotFoundException;
 
 @ControllerAdvice
 public class RestErrorHandler {

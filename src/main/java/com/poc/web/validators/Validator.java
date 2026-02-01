@@ -49,6 +49,7 @@ public class Validator {
 	/* *************************************************************************************************** */
 	
 	private void validateNationalId(String nationalId) {
+		
 		if (nationalId == null) {
 			throw new IllegalArgumentException("nationalId is required");
 		}
@@ -59,6 +60,7 @@ public class Validator {
 	}
 	
 	private void validateCellPhone(String cellPhone) {
+		
 		if (cellPhone == null) {
 			throw new IllegalArgumentException("cellPhone is required");
 		}
@@ -69,6 +71,7 @@ public class Validator {
 	}
 	
 	private void validateEmail(String email) {
+		
 		if (email == null) {
 			throw new IllegalArgumentException("email is required");
 		}
@@ -79,6 +82,7 @@ public class Validator {
 	}
 	
 	private void validateMailingAddress(String mailingAddress) {
+		
 		if (mailingAddress == null) {
 			throw new IllegalArgumentException("mailingAddress is required");
 		}

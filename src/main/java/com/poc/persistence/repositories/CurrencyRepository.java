@@ -8,6 +8,6 @@ import com.poc.persistence.entities.Currency;
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Integer> {
 	
-	Currency findByCode(String code);
+	public Currency findByCode(String code);
 
 }
