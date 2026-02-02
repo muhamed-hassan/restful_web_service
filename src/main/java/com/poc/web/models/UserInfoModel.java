@@ -2,21 +2,11 @@ package com.poc.web.models;
 
 public abstract class UserInfoModel {
 
-	private String nationalId;
-	
 	private String cellPhone;
 	
 	private String email;
 	
 	private String mailingAddress;
-	
-	public String getNationalId() {
-		return nationalId;
-	}
-
-	public void setNationalId(String nationalId) {
-		this.nationalId = nationalId;
-	}
 
 	public String getCellPhone() {
 		return cellPhone;

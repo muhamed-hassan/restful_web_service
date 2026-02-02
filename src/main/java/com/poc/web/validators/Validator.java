@@ -36,8 +36,6 @@ public class Validator {
 	
 	public void validateUserInfoUpdateModel(UserInfoUpdateModel userInfoUpdateModel) {
 		
-		validateNationalId(userInfoUpdateModel.getNationalId());
-		
 		validateCellPhone(userInfoUpdateModel.getCellPhone());
 		
 		validateEmail(userInfoUpdateModel.getEmail());

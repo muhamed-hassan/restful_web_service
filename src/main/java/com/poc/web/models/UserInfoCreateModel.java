@@ -4,6 +4,8 @@ public class UserInfoCreateModel extends UserInfoModel {
 
 	private String name;
 	
+	private String nationalId;
+	
 	private String dateOfBirth; // dd-MM-yyyy
 
 	public String getName() {
@@ -12,6 +14,14 @@ public class UserInfoCreateModel extends UserInfoModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getNationalId() {
+		return nationalId;
+	}
+
+	public void setNationalId(String nationalId) {
+		this.nationalId = nationalId;
 	}
 
 	public String getDateOfBirth() {
