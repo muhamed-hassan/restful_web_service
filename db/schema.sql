@@ -25,7 +25,6 @@ CREATE TABLE `user_info` (
   `mailing_address` varchar(250) NOT NULL,
   `account_number` varchar(8) NOT NULL,
   `balance` float unsigned NOT NULL,
-  `version` int unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `national_id_UQ` (`national_id`),
   UNIQUE KEY `cell_phone_UQ` (`cell_phone`),

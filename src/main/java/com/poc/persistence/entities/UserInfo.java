@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 @Table(name = "user_info")
 @Entity
@@ -33,9 +32,6 @@ public class UserInfo {
 	
 	@Embedded
 	private BankAccountInfo bankAccountInfo;
-
-	@Version
-	private int version;
 
 	public int getId() {
 		return id;
@@ -83,14 +79,6 @@ public class UserInfo {
 
 	public void setBankAccountInfo(BankAccountInfo bankAccountInfo) {
 		this.bankAccountInfo = bankAccountInfo;
-	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
 	}
 	
 	@Override

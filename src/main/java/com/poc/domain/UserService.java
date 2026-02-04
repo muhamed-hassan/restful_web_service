@@ -4,11 +4,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Random;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +14,7 @@ import com.poc.domain.exceptions.DataNotFoundException;
 import com.poc.persistence.entities.BankAccountInfo;
 import com.poc.persistence.entities.ContactInfo;
 import com.poc.persistence.entities.IbanConfigs;
+import com.poc.persistence.entities.Page;
 import com.poc.persistence.entities.UserInfo;
 import com.poc.persistence.repositories.IbanConfigsRepository;
 import com.poc.persistence.repositories.UserInfoRepository;
@@ -30,9 +29,6 @@ public class UserService {
 	
 	@Autowired
 	private UserInfoRepository userInfoRepository;
-	
-	@Value("${page.size}")
-    private int pageSize;
 	
 	@Autowired
 	private DateFormat dateFormat;
@@ -51,7 +47,9 @@ public class UserService {
 		userInfo.setContactInfo(contactInfo);
 		
 		try {
+			
 			userInfo.setDateOfBirth(dateFormat.parse(userInfoCreateModel.getDateOfBirth()));
+			
 		} catch (ParseException e) {
 			throw new IllegalArgumentException(e.getMessage());
 		}
@@ -68,35 +66,39 @@ public class UserService {
 		userInfoRepository.save(userInfo);
 	}
 	
-	public UserInfo getUserInfoByNationalId(String nationalId) {
+	public Object[] getBriefViewForUpdateOfUserInfoByNationalId(String nationalId) {
 		
-		UserInfo userInfo = userInfoRepository.findByNationalId(nationalId);
-		if (userInfo == null) {
+		Object[] rawUserInfo;
+		try {
+			
+			rawUserInfo = userInfoRepository.findBriefViewForUpdateByNationalId(nationalId);
+			
+		} catch (NoResultException e) {
 			throw new DataNotFoundException();
-		}		
+		}	
 		
-		return userInfo;
+		return rawUserInfo;
 	}
 	
-	@Transactional
-	public void updateUserInfo(int id, UserInfoUpdateModel userInfoUpdateModel) {
+	public Object[] getDetailedViewOfUserInfoByNationalId(String nationalId) {
 		
-		userInfoRepository.updateUserInfo(userInfoUpdateModel.getCellPhone(), userInfoUpdateModel.getEmail(), 
-											userInfoUpdateModel.getMailingAddress(), id);
+		Object[] rawUserInfo;
+		try {
+			
+			rawUserInfo = userInfoRepository.findDetailedViewByNationalId(nationalId);
+			
+		} catch (NoResultException e) {
+			throw new DataNotFoundException();
+		}	
+		
+		return rawUserInfo;
 	}
 	
-	@Transactional
-	public void removeUserInfo(int id) {	
+	public Page getPageOfUserInfo(int pageIndex) {
+				
+		Page page = userInfoRepository.findPage(pageIndex);
 		
-		userInfoRepository.delete(id);
-	}
-	
-	public Page<UserInfo> getPageOfUserInfo(int pageIndex) {
-		
-		Pageable pageRequest = new PageRequest(pageIndex, pageSize);
-		Page<UserInfo> page = userInfoRepository.findAll(pageRequest);
-		
-		if (!page.hasContent()) {
+		if (page.getData().isEmpty()) {
 			throw new DataNotFoundException();
 		}
 
@@ -105,8 +107,20 @@ public class UserService {
 	
 	public IbanConfigs getIbanConfigs() {
 		
-		IbanConfigs ibanConfigs = ibanConfigsRepository.findOne(1);
+		IbanConfigs ibanConfigs = ibanConfigsRepository.findById(1);
 		return ibanConfigs;
+	}
+
+	@Transactional
+	public void updateUserInfo(int id, UserInfoUpdateModel userInfoUpdateModel) {
+		
+		userInfoRepository.update(id, userInfoUpdateModel);
+	}
+	
+	@Transactional
+	public void removeUserInfo(int id) {	
+		
+		userInfoRepository.delete(id);
 	}
 
 }

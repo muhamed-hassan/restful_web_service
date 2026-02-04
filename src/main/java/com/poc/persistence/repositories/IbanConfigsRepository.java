@@ -1,11 +1,17 @@
 package com.poc.persistence.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.poc.persistence.entities.IbanConfigs;
 
 @Repository
-public interface IbanConfigsRepository extends JpaRepository<IbanConfigs, Integer> {
+public class IbanConfigsRepository extends BaseRepository {
+	
+	public IbanConfigs findById(int id) {
+		
+		IbanConfigs ibanConfigs = entityManager.find(IbanConfigs.class, id);
+		
+		return ibanConfigs;
+	}
 
 }

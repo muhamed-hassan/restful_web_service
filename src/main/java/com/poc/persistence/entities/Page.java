@@ -1,20 +1,20 @@
-package com.poc.web.models;
+package com.poc.persistence.entities;
 
-import java.util.HashSet;
+import java.util.List;
 
-public class PageOfUserInfo {
+public class Page {
 	
-	private HashSet<BriefUserInfoReadModel> data;
+	private List<Object[]> data;
 	
 	private boolean firstPage;
 	
 	private boolean lastPage;
 
-	public HashSet<BriefUserInfoReadModel> getData() {
+	public List<Object[]> getData() {
 		return data;
 	}
 
-	public void setData(HashSet<BriefUserInfoReadModel> data) {
+	public void setData(List<Object[]> data) {
 		this.data = data;
 	}
 

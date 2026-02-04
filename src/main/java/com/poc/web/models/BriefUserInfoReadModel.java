@@ -4,8 +4,6 @@ import java.util.Objects;
 
 public class BriefUserInfoReadModel {
 	
-	private int id;
-	
 	private String name;
 
 	private String nationalId;
@@ -13,14 +11,6 @@ public class BriefUserInfoReadModel {
 	private String iban;
 	
 	private float balance;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -56,7 +46,7 @@ public class BriefUserInfoReadModel {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(nationalId);
 	}
 
 	@Override
@@ -71,7 +61,7 @@ public class BriefUserInfoReadModel {
 			return false;
 		}
 		BriefUserInfoReadModel other = (BriefUserInfoReadModel) object;
-		return id == other.getId();
+		return nationalId == other.getNationalId();
 	}
 	
 }

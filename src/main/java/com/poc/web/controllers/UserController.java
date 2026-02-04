@@ -1,11 +1,11 @@
 package com.poc.web.controllers;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.poc.domain.UserService;
 import com.poc.persistence.entities.IbanConfigs;
-import com.poc.persistence.entities.UserInfo;
+import com.poc.persistence.entities.Page;
 import com.poc.web.models.BriefUserInfoReadModel;
 import com.poc.web.models.DetailedUserInfoReadModel;
 import com.poc.web.models.PageOfUserInfo;
 import com.poc.web.models.UserInfoCreateModel;
+import com.poc.web.models.UserInfoReadModelForUpdate;
 import com.poc.web.models.UserInfoUpdateModel;
 import com.poc.web.validators.Validator;
 
@@ -48,27 +49,73 @@ public class UserController {
 		return new ResponseEntity<Object>(HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "{nationalId}")
-	public ResponseEntity<DetailedUserInfoReadModel> getUserInfoByNationalId(@PathVariable String nationalId) {
+	@RequestMapping(method = RequestMethod.GET, value = "brief-view-for-update/{nationalId}")
+	public ResponseEntity<UserInfoReadModelForUpdate> getBriefUserInfoForUpdateByNationalId(@PathVariable String nationalId) {
+			
+		validator.validateNationalId(nationalId);
+		
+		Object[] rawUserInfo = userService.getBriefViewForUpdateOfUserInfoByNationalId(nationalId);
+		
+        UserInfoReadModelForUpdate userInfoReadModelForUpdate = new UserInfoReadModelForUpdate();	
+        userInfoReadModelForUpdate.setId((int) rawUserInfo[0]);
+        userInfoReadModelForUpdate.setCellPhone((String) rawUserInfo[1]);
+        userInfoReadModelForUpdate.setEmail((String) rawUserInfo[2]);
+        userInfoReadModelForUpdate.setMailingAddress((String) rawUserInfo[3]);		
+		
+		return new ResponseEntity<UserInfoReadModelForUpdate>(userInfoReadModelForUpdate, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "detailed-view/{nationalId}")
+	public ResponseEntity<DetailedUserInfoReadModel> getDetailedViewUserInfoByNationalId(@PathVariable String nationalId) {
 			
 		validator.validateNationalId(nationalId);
 		
 		IbanConfigs ibanConfigs = userService.getIbanConfigs();
-		UserInfo userInfo = userService.getUserInfoByNationalId(nationalId);
+		Object[] rawUserInfo = userService.getDetailedViewOfUserInfoByNationalId(nationalId);
 		
 		DetailedUserInfoReadModel userInfoReadModel = new DetailedUserInfoReadModel();
-		userInfoReadModel.setName(userInfo.getName());		
-		userInfoReadModel.setNationalId(userInfo.getNationalId());
-		userInfoReadModel.setDateOfBirth(dateFormat.format(userInfo.getDateOfBirth()));		
-		userInfoReadModel.setCellPhone(userInfo.getContactInfo().getCellPhone());
-		userInfoReadModel.setEmail(userInfo.getContactInfo().getEmail());
-		userInfoReadModel.setMailingAddress(userInfo.getContactInfo().getMailingAddress());
-		userInfoReadModel.setIban(toIban(ibanConfigs, userInfo.getBankAccountInfo().getAccountNumber()));
-		userInfoReadModel.setBalance(userInfo.getBankAccountInfo().getBalance());
+		userInfoReadModel.setId((int) rawUserInfo[0]);
+		userInfoReadModel.setName((String) rawUserInfo[1]);		
+		userInfoReadModel.setNationalId((String) rawUserInfo[2]);
+		userInfoReadModel.setDateOfBirth(dateFormat.format((Date) rawUserInfo[3]));	
+		userInfoReadModel.setCellPhone((String) rawUserInfo[4]);
+		userInfoReadModel.setEmail((String) rawUserInfo[5]);
+		userInfoReadModel.setMailingAddress((String) rawUserInfo[6]);		
+		userInfoReadModel.setIban(toIban(ibanConfigs, (String) rawUserInfo[7]));
+		userInfoReadModel.setBalance((float) rawUserInfo[8]);
 		
 		return new ResponseEntity<DetailedUserInfoReadModel>(userInfoReadModel, HttpStatus.OK);
 	}
 		
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<PageOfUserInfo> getPageOfUserInfo(@RequestParam int pageIndex) {
+			
+		IbanConfigs ibanConfigs = userService.getIbanConfigs();
+		Page page = userService.getPageOfUserInfo(pageIndex);
+		
+		List<Object[]> rawData = page.getData();
+		HashSet<BriefUserInfoReadModel> userInfoReadModels = new HashSet<BriefUserInfoReadModel>();
+		for (int cursor = 0; cursor < rawData.size(); cursor++) {
+			
+			Object[] currentElement = rawData.get(cursor);
+						
+			BriefUserInfoReadModel userInfoReadModel = new BriefUserInfoReadModel();
+			userInfoReadModel.setName((String) currentElement[0]);
+			userInfoReadModel.setNationalId((String) currentElement[1]);
+			userInfoReadModel.setIban(toIban(ibanConfigs, (String) currentElement[2]));
+			userInfoReadModel.setBalance((float) currentElement[3]);
+			
+			userInfoReadModels.add(userInfoReadModel);
+		}
+		
+		PageOfUserInfo pageOfUserInfo = new PageOfUserInfo();
+		pageOfUserInfo.setData(userInfoReadModels);
+		pageOfUserInfo.setFirstPage(page.isFirstPage());
+		pageOfUserInfo.setLastPage(page.isLastPage());
+		
+		return new ResponseEntity<PageOfUserInfo>(pageOfUserInfo, HttpStatus.OK);
+	}
+	
 	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
 	public ResponseEntity<Object> updateUserInfo(@PathVariable int id, @RequestBody UserInfoUpdateModel userInfoUpdateModel) {
 
@@ -85,38 +132,6 @@ public class UserController {
 		userService.removeUserInfo(id);
 		
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-	}
-
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<PageOfUserInfo> getPageOfUserInfo(@RequestParam int pageIndex) {
-			
-		IbanConfigs ibanConfigs = userService.getIbanConfigs();
-		Page<UserInfo> page = userService.getPageOfUserInfo(pageIndex);
-		
-		List<UserInfo> content = page.getContent();
-		HashSet<BriefUserInfoReadModel> userInfoReadModels = new HashSet<BriefUserInfoReadModel>();
-		for (int cursor = 0; cursor < content.size(); cursor++) {
-			
-			UserInfo currentElement = content.get(cursor);
-						
-			BriefUserInfoReadModel userInfoReadModel = new BriefUserInfoReadModel();
-			userInfoReadModel.setId(currentElement.getId());
-			userInfoReadModel.setName(currentElement.getName());
-			userInfoReadModel.setNationalId(currentElement.getNationalId());
-			userInfoReadModel.setIban(toIban(ibanConfigs, currentElement.getBankAccountInfo().getAccountNumber()));
-			userInfoReadModel.setBalance(currentElement.getBankAccountInfo().getBalance());
-			
-			userInfoReadModels.add(userInfoReadModel);
-		}
-		
-		PageOfUserInfo pageOfUserInfo = new PageOfUserInfo();
-		pageOfUserInfo.setData(userInfoReadModels);
-		pageOfUserInfo.setTotalElements((int) page.getTotalElements());
-		pageOfUserInfo.setTotalPages(page.getTotalPages());
-		pageOfUserInfo.setFirstPage(page.isFirstPage());
-		pageOfUserInfo.setLastPage(page.isLastPage());
-		
-		return new ResponseEntity<PageOfUserInfo>(pageOfUserInfo, HttpStatus.OK);
 	}
 	
 	/* *************************************************************************************************** */
