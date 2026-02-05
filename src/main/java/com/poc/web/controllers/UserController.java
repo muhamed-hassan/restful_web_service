@@ -88,10 +88,10 @@ public class UserController {
 	}
 		
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<PageOfUserInfo> getPageOfUserInfo(@RequestParam int pageIndex) {
+	public ResponseEntity<PageOfUserInfo> getPageOfBankAccounts(@RequestParam int pageIndex) {
 			
 		IbanConfigs ibanConfigs = userService.getIbanConfigs();
-		Page page = userService.getPageOfUserInfo(pageIndex);
+		Page page = userService.getPageOfBankAccounts(pageIndex);
 		
 		List<Object[]> rawData = page.getData();
 		HashSet<BriefUserInfoReadModel> userInfoReadModels = new HashSet<BriefUserInfoReadModel>();
@@ -127,9 +127,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
-	public ResponseEntity<Object> removeUserInfo(@PathVariable int id) {
+	public ResponseEntity<Object> removeBankAccount(@PathVariable int id) {
 		
-		userService.removeUserInfo(id);
+		userService.removeBankAccount(id);
 		
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}

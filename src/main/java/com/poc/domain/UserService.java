@@ -94,7 +94,7 @@ public class UserService {
 		return rawUserInfo;
 	}
 	
-	public Page getPageOfUserInfo(int pageIndex) {
+	public Page getPageOfBankAccounts(int pageIndex) {
 				
 		Page page = userInfoRepository.findPage(pageIndex);
 		
@@ -118,7 +118,7 @@ public class UserService {
 	}
 	
 	@Transactional
-	public void removeUserInfo(int id) {	
+	public void removeBankAccount(int id) {	
 		
 		userInfoRepository.delete(id);
 	}
