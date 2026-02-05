@@ -34,7 +34,7 @@ public class UserService {
 	private DateFormat dateFormat;
 	
 	@Transactional
-	public void createUserInfo(UserInfoCreateModel userInfoCreateModel) {
+	public void saveBankAccount(UserInfoCreateModel userInfoCreateModel) {
 		
 		UserInfo userInfo = new UserInfo();
 		userInfo.setName(userInfoCreateModel.getName());
@@ -66,7 +66,7 @@ public class UserService {
 		userInfoRepository.save(userInfo);
 	}
 	
-	public Object[] getBriefViewForUpdateOfUserInfoByNationalId(String nationalId) {
+	public Object[] getBriefViewOfUserInfoForUpdateByNationalId(String nationalId) {
 		
 		Object[] rawUserInfo;
 		try {
@@ -112,7 +112,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public void updateUserInfo(int id, UserInfoUpdateModel userInfoUpdateModel) {
+	public void updateBankAccount(int id, UserInfoUpdateModel userInfoUpdateModel) {
 		
 		userInfoRepository.update(id, userInfoUpdateModel);
 	}

@@ -40,21 +40,21 @@ public class UserController {
 	private DateFormat dateFormat;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Object> createUserInfo(@RequestBody UserInfoCreateModel userInfoCreateModel) {
+	public ResponseEntity<Object> saveBankAccount(@RequestBody UserInfoCreateModel userInfoCreateModel) {
 		
 		validator.validateUserInfoCreateModel(userInfoCreateModel);	
 		
-		userService.createUserInfo(userInfoCreateModel);
+		userService.saveBankAccount(userInfoCreateModel);
 		
 		return new ResponseEntity<Object>(HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "brief-view-for-update/{nationalId}")
-	public ResponseEntity<UserInfoReadModelForUpdate> getBriefUserInfoForUpdateByNationalId(@PathVariable String nationalId) {
+	public ResponseEntity<UserInfoReadModelForUpdate> getBriefViewForUpdateByNationalId(@PathVariable String nationalId) {
 			
 		validator.validateNationalId(nationalId);
 		
-		Object[] rawUserInfo = userService.getBriefViewForUpdateOfUserInfoByNationalId(nationalId);
+		Object[] rawUserInfo = userService.getBriefViewOfUserInfoForUpdateByNationalId(nationalId);
 		
         UserInfoReadModelForUpdate userInfoReadModelForUpdate = new UserInfoReadModelForUpdate();	
         userInfoReadModelForUpdate.setId((int) rawUserInfo[0]);
@@ -66,7 +66,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "detailed-view/{nationalId}")
-	public ResponseEntity<DetailedUserInfoReadModel> getDetailedViewUserInfoByNationalId(@PathVariable String nationalId) {
+	public ResponseEntity<DetailedUserInfoReadModel> getDetailedViewByNationalId(@PathVariable String nationalId) {
 			
 		validator.validateNationalId(nationalId);
 		
@@ -117,11 +117,11 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
-	public ResponseEntity<Object> updateUserInfo(@PathVariable int id, @RequestBody UserInfoUpdateModel userInfoUpdateModel) {
+	public ResponseEntity<Object> updateBankAccount(@PathVariable int id, @RequestBody UserInfoUpdateModel userInfoUpdateModel) {
 
 		validator.validateUserInfoUpdateModel(userInfoUpdateModel);
 		
-		userService.updateUserInfo(id, userInfoUpdateModel);
+		userService.updateBankAccount(id, userInfoUpdateModel);
 		
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
