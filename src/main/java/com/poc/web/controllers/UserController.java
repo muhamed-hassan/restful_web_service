@@ -20,7 +20,7 @@ import com.poc.persistence.entities.IbanConfigs;
 import com.poc.persistence.entities.Page;
 import com.poc.web.models.BriefUserInfoReadModel;
 import com.poc.web.models.DetailedUserInfoReadModel;
-import com.poc.web.models.PageOfUserInfo;
+import com.poc.web.models.PageOfBankAccounts;
 import com.poc.web.models.UserInfoCreateModel;
 import com.poc.web.models.UserInfoReadModelForUpdate;
 import com.poc.web.models.UserInfoUpdateModel;
@@ -88,7 +88,7 @@ public class UserController {
 	}
 		
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<PageOfUserInfo> getPageOfBankAccounts(@RequestParam int pageIndex) {
+	public ResponseEntity<PageOfBankAccounts> getPageOfBankAccounts(@RequestParam int pageIndex) {
 			
 		IbanConfigs ibanConfigs = userService.getIbanConfigs();
 		Page page = userService.getPageOfBankAccounts(pageIndex);
@@ -108,12 +108,12 @@ public class UserController {
 			userInfoReadModels.add(userInfoReadModel);
 		}
 		
-		PageOfUserInfo pageOfUserInfo = new PageOfUserInfo();
+		PageOfBankAccounts pageOfUserInfo = new PageOfBankAccounts();
 		pageOfUserInfo.setData(userInfoReadModels);
 		pageOfUserInfo.setFirstPage(page.isFirstPage());
 		pageOfUserInfo.setLastPage(page.isLastPage());
 		
-		return new ResponseEntity<PageOfUserInfo>(pageOfUserInfo, HttpStatus.OK);
+		return new ResponseEntity<PageOfBankAccounts>(pageOfUserInfo, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
