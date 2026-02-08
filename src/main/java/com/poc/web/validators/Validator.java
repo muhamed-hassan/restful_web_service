@@ -1,92 +1,219 @@
 package com.poc.web.validators;
 
+import java.util.HashMap;
+
 import org.springframework.stereotype.Component;
 
+import com.poc.web.error_handler.WebValidationException;
 import com.poc.web.models.UserInfoCreateModel;
 import com.poc.web.models.UserInfoUpdateModel;
 
-//https://en.wikipedia.org/wiki/Fail-fast approach is used to report validation errors
 @Component
 public class Validator {
-		
+	
+	private String nameField = "name";
+	private String nameFieldIsRequiredMsg = "Name is required";
+	private String nameFieldValidationRegex = "[a-zA-Z\\ ]{5,250}";
+	private String nameFieldIsInvalidMsg = "Name contains invalid characters and shall contain letters only with maximum of 250";	
+	
+	private String nationalIdField = "nationalId";
+	private String nationalIdFieldIsRequiredMsg = "National ID is required";
+	private String nationalIdFieldValidationRegex = "[0-9]{14}";
+	private String nationalIdFieldIsInvalidMsg = "National ID contains invalid characters and shall contain 14 digits only";
+	
+	private String dateOfBirthField = "dob";
+	private String dateOfBirthFieldIsRequiredMsg = "Date of birth is required";
+	private String dateOfBirthFieldValidationRegex = "((19[7-9][0-9])|(2[0-9][0-9][0-9]))-(0[1-9]|1[0-2])-(0[1-9]|([1-2][0-9])|3[0-1])";
+	private String dateOfBirthFieldIsInvalidMsg = "Date of birth contains invalid characters and shall be in the form of yyyy-MM-dd";
+	
+	private String cellPhoneField = "cellPhone";
+	private String cellPhoneFieldIsRequiredMsg = "Cell phone is required";
+	private String cellPhoneFieldValidationRegex = "(07)[0-9]{9}";
+	private String cellPhoneFieldIsInvalidMsg = "Cell phone contains invalid characters and shall be in this form 07123456789";
+	
+	private String emailField = "email";
+	private String emailFieldIsRequiredMsg = "Email is required";
+	private String emailFieldValidationRegex = "[a-zA-Z0-9_\\.]+(\\@)[a-zA-Z0-9]+(\\.)[a-zA-Z]+";
+	private String emailFieldIsInvalidMsg = "Email format is invalid";
+	
+	private String mailingAddressField = "mailingAddress";
+	private String mailingAddressFieldIsRequiredMsg = "Mailing address is required";
+	private String mailingAddressFieldValidationRegex = "[a-zA-Z0-9-,\\ ]{15,250}";
+	private String mailingAddressFieldIsInvalidMsg = "Mailing address contains invalid characters and shall contain alphanumeric characters only with maximum of 250";
+	
+	
 	public void validateUserInfoCreateModel(UserInfoCreateModel userInfoCreateModel) {
 		
+		HashMap<String, String> errorInformation = new HashMap<String, String>();
+		
 		String name = userInfoCreateModel.getName();
-		if (name == null) {
-			throw new IllegalArgumentException("name is required");
+		if (name == null || name.isEmpty()) {
+			
+			errorInformation.put(nameField, nameFieldIsRequiredMsg);
+			
+		} else {
+			
+			name = name.trim();
+			if (!name.matches(nameFieldValidationRegex)) {
+				errorInformation.put(nameField, nameFieldIsInvalidMsg);
+			}
+			
 		}
-		name = name.trim();
-		if (!name.matches("[a-zA-Z\\ ]{5,250}")) {
-			throw new IllegalArgumentException("name contains invalid characters and shall contain letters only with maximum of 250");
+		
+		String nationalId = userInfoCreateModel.getNationalId();
+		if (nationalId == null || nationalId.isEmpty()) {
+			
+			errorInformation.put(nationalIdField, nationalIdFieldIsRequiredMsg);
+			
+		} else {
+			
+			nationalId = nationalId.trim();
+			if (!nationalId.matches(nationalIdFieldValidationRegex)) {
+				errorInformation.put(nationalIdField, nationalIdFieldIsInvalidMsg);
+			}
+			
 		}
 		
-		validateNationalId(userInfoCreateModel.getNationalId());
+		String dateOfBirth = userInfoCreateModel.getDateOfBirth();
+		if (dateOfBirth == null || dateOfBirth.isEmpty()) {
+			
+			errorInformation.put(dateOfBirthField, dateOfBirthFieldIsRequiredMsg);
+			
+		} else {
+			
+			dateOfBirth = dateOfBirth.trim();
+			if (!dateOfBirth.matches(dateOfBirthFieldValidationRegex)) {
+				errorInformation.put(dateOfBirthField, dateOfBirthFieldIsInvalidMsg);
+			}
+			
+		}
 		
-		String dateOfBirthStr = userInfoCreateModel.getDateOfBirth();
-		if (dateOfBirthStr == null || dateOfBirthStr.isEmpty()) {
-			throw new IllegalArgumentException("dateOfBirth is required");
-		}	
+		String cellPhone = userInfoCreateModel.getCellPhone();
+		if (cellPhone == null || cellPhone.isEmpty()) {
+			
+			errorInformation.put(cellPhoneField, cellPhoneFieldIsRequiredMsg);
+			
+		} else {
+			
+			cellPhone = cellPhone.trim();
+			if (!cellPhone.matches(cellPhoneFieldValidationRegex)) {
+				errorInformation.put(cellPhoneField, cellPhoneFieldIsInvalidMsg);
+			}
+			
+		}
 		
-		validateCellPhone(userInfoCreateModel.getCellPhone());
+		String email = userInfoCreateModel.getEmail();
+		if (email == null || email.isEmpty()) {
+			
+			errorInformation.put(emailField, emailFieldIsRequiredMsg);
+			
+		} else {
+			
+			email = email.trim();
+			if (!email.matches(emailFieldValidationRegex)) {
+				errorInformation.put(emailField, emailFieldIsInvalidMsg);
+			}
+			
+		}
 		
-		validateEmail(userInfoCreateModel.getEmail());
+		String mailingAddress = userInfoCreateModel.getMailingAddress();
+		if (mailingAddress == null || mailingAddress.isEmpty()) {
+			
+			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);
+			
+		} else {
+			
+			mailingAddress = mailingAddress.trim();
+			if (!mailingAddress.matches(mailingAddressFieldValidationRegex)) {
+				errorInformation.put(mailingAddressField, mailingAddressFieldIsInvalidMsg);
+			}
+			
+		}
 		
-		validateMailingAddress(userInfoCreateModel.getMailingAddress());
-	}	
-	
-	public void validateUserInfoUpdateModel(UserInfoUpdateModel userInfoUpdateModel) {
-		
-		validateCellPhone(userInfoUpdateModel.getCellPhone());
-		
-		validateEmail(userInfoUpdateModel.getEmail());
-		
-		validateMailingAddress(userInfoUpdateModel.getMailingAddress());
+		if (!errorInformation.isEmpty()) {
+			
+			WebValidationException webValidationException = new WebValidationException();
+			webValidationException.setErrorInformation(errorInformation);
+			throw webValidationException;
+		}
 	}
 	
 	public void validateNationalId(String nationalId) {
 		
-		if (nationalId == null) {
-			throw new IllegalArgumentException("nationalId is required");
+		HashMap<String, String> errorInformation = new HashMap<String, String>();
+		
+		if (nationalId.equals("0")) {
+			
+			errorInformation.put(nationalIdField, nationalIdFieldIsRequiredMsg);
+			
+		} else {
+			
+			nationalId = nationalId.trim();
+			if (!nationalId.matches(nationalIdFieldValidationRegex)) {
+				errorInformation.put(nationalIdField, nationalIdFieldIsInvalidMsg);
+			}
+			
 		}
-		nationalId = nationalId.trim();
-		if (!nationalId.matches("[0-9]{14}")) {
-			throw new IllegalArgumentException("nationalId contains invalid characters and shall contain 14 digits only");
+		
+		if (!errorInformation.isEmpty()) {
+			
+			WebValidationException webValidationException = new WebValidationException();
+			webValidationException.setErrorInformation(errorInformation);
+			throw webValidationException;
 		}
 	}
 	
-	/* *************************************************************************************************** */
-	/* *************************************************************************************************** */
-	
-	private void validateCellPhone(String cellPhone) {
+	public void validateUserInfoUpdateModel(UserInfoUpdateModel userInfoUpdateModel) {
 		
-		if (cellPhone == null) {
-			throw new IllegalArgumentException("cellPhone is required");
-		}
-		cellPhone = cellPhone.trim();
-		if (!cellPhone.matches("(07)[0-9]{9}")) {
-			throw new IllegalArgumentException("cellPhone contains invalid characters and shall be in this form 07123456789");
-		}
-	}
-	
-	private void validateEmail(String email) {
+		HashMap<String, String> errorInformation = new HashMap<String, String>();
 		
-		if (email == null) {
-			throw new IllegalArgumentException("email is required");
+		String cellPhone = userInfoUpdateModel.getCellPhone();
+		if (cellPhone == null || cellPhone.isEmpty()) {
+			
+			errorInformation.put(cellPhoneField, cellPhoneFieldIsRequiredMsg);
+			
+		} else {
+			
+			cellPhone = cellPhone.trim();
+			if (!cellPhone.matches(cellPhoneFieldValidationRegex)) {
+				errorInformation.put(cellPhoneField, cellPhoneFieldIsInvalidMsg);
+			}
+			
 		}
-		email = email.trim();
-		if (!email.matches("[a-zA-Z0-9_\\.]+(\\@)[a-zA-Z0-9]+(\\.)[a-zA-Z]+")) {
-			throw new IllegalArgumentException("email format is invalid");
-		}
-	}
-	
-	private void validateMailingAddress(String mailingAddress) {
 		
-		if (mailingAddress == null) {
-			throw new IllegalArgumentException("mailingAddress is required");
+		String email = userInfoUpdateModel.getEmail();
+		if (email == null || email.isEmpty()) {
+			
+			errorInformation.put(emailField, emailFieldIsRequiredMsg);
+			
+		} else {
+			
+			email = email.trim();
+			if (!email.matches(emailFieldValidationRegex)) {
+				errorInformation.put(emailField, emailFieldIsInvalidMsg);
+			}
+			
 		}
-		mailingAddress = mailingAddress.trim();
-		if (!mailingAddress.matches("[a-zA-Z0-9-,\\ ]{15,250}")) {
-			throw new IllegalArgumentException("mailingAddress contains invalid characters and shall contain alphanumeric characters only with maximum of 250");
+		
+		String mailingAddress = userInfoUpdateModel.getMailingAddress();
+		if (mailingAddress == null || mailingAddress.isEmpty()) {
+			
+			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);
+			
+		} else {
+			
+			mailingAddress = mailingAddress.trim();
+			if (!mailingAddress.matches(mailingAddressFieldValidationRegex)) {
+				errorInformation.put(mailingAddressField, mailingAddressFieldIsInvalidMsg);
+			}
+			
+		}
+		
+		if (!errorInformation.isEmpty()) {
+			
+			WebValidationException webValidationException = new WebValidationException();
+			webValidationException.setErrorInformation(errorInformation);
+			throw webValidationException;
 		}
 	}
 	

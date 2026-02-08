@@ -8,7 +8,7 @@ public class DetailedUserInfoReadModel extends UserInfoModel {
 	
 	private String nationalId;
 	
-	private String dateOfBirth; // dd-MM-yyyy
+	private String dateOfBirth; // yyyy-MM-dd
 	
 	private String iban;
 	

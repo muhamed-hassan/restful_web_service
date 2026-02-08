@@ -1,6 +1,8 @@
 package com.poc.web.controllers;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poc.domain.UserService;
+import com.poc.persistence.entities.BankAccountInfo;
+import com.poc.persistence.entities.ContactInfo;
 import com.poc.persistence.entities.IbanConfigs;
 import com.poc.persistence.entities.Page;
+import com.poc.persistence.entities.UserInfo;
 import com.poc.web.models.BriefUserInfoReadModel;
 import com.poc.web.models.DetailedUserInfoReadModel;
 import com.poc.web.models.PageOfBankAccounts;
@@ -29,22 +34,36 @@ import com.poc.web.validators.Validator;
 @RequestMapping("users")
 @RestController
 public class UserController {
-	
+		
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
 	private Validator validator; 
 	
-	@Autowired
-	private DateFormat dateFormat;
-	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Object> saveBankAccount(@RequestBody UserInfoCreateModel userInfoCreateModel) {
 		
 		validator.validateUserInfoCreateModel(userInfoCreateModel);	
 		
-		userService.saveBankAccount(userInfoCreateModel);
+		UserInfo userInfo = new UserInfo();
+		userInfo.setName(userInfoCreateModel.getName());
+		userInfo.setNationalId(userInfoCreateModel.getNationalId());
+		try {			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			userInfo.setDateOfBirth(dateFormat.parse(userInfoCreateModel.getDateOfBirth()));			
+		} catch (ParseException e) {}
+		
+		ContactInfo contactInfo = new ContactInfo();
+		contactInfo.setCellPhone(userInfoCreateModel.getCellPhone());		
+		contactInfo.setEmail(userInfoCreateModel.getEmail());
+		contactInfo.setMailingAddress(userInfoCreateModel.getMailingAddress());
+		userInfo.setContactInfo(contactInfo);
+		
+		BankAccountInfo bankAccountInfo = new BankAccountInfo();		
+		userInfo.setBankAccountInfo(bankAccountInfo);
+		
+		userService.saveBankAccount(userInfo);
 		
 		return new ResponseEntity<Object>(HttpStatus.CREATED);
 	}
@@ -72,6 +91,8 @@ public class UserController {
 		
 		IbanConfigs ibanConfigs = userService.getIbanConfigs();
 		Object[] rawUserInfo = userService.getDetailedViewOfUserInfoByNationalId(nationalId);
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		DetailedUserInfoReadModel userInfoReadModel = new DetailedUserInfoReadModel();
 		userInfoReadModel.setId((int) rawUserInfo[0]);

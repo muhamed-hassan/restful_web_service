@@ -6,7 +6,7 @@ public class UserInfoCreateModel extends UserInfoModel {
 	
 	private String nationalId;
 	
-	private String dateOfBirth; // dd-MM-yyyy
+	private String dateOfBirth; // yyyy-MM-dd
 
 	public String getName() {
 		return name;
