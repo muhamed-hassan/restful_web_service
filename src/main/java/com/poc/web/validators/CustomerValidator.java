@@ -5,11 +5,11 @@ import java.util.HashMap;
 import org.springframework.stereotype.Component;
 
 import com.poc.web.error_handler.WebValidationException;
-import com.poc.web.models.UserInfoCreateModel;
-import com.poc.web.models.UserInfoUpdateModel;
+import com.poc.web.models.CustomerCreateModel;
+import com.poc.web.models.CustomerUpdateModel;
 
 @Component
-public class Validator {
+public class CustomerValidator {
 	
 	private String nameField = "name";
 	private String nameFieldIsRequiredMsg = "Name is required";
@@ -42,11 +42,11 @@ public class Validator {
 	private String mailingAddressFieldIsInvalidMsg = "Mailing address contains invalid characters and shall contain alphanumeric characters only with maximum of 250";
 	
 	
-	public void validateUserInfoCreateModel(UserInfoCreateModel userInfoCreateModel) {
+	public void validateCustomerCreateModel(CustomerCreateModel customerCreateModel) {
 		
 		HashMap<String, String> errorInformation = new HashMap<String, String>();
 		
-		String name = userInfoCreateModel.getName();
+		String name = customerCreateModel.getName();
 		if (name == null || name.isEmpty()) {
 			
 			errorInformation.put(nameField, nameFieldIsRequiredMsg);
@@ -60,7 +60,7 @@ public class Validator {
 			
 		}
 		
-		String nationalId = userInfoCreateModel.getNationalId();
+		String nationalId = customerCreateModel.getNationalId();
 		if (nationalId == null || nationalId.isEmpty()) {
 			
 			errorInformation.put(nationalIdField, nationalIdFieldIsRequiredMsg);
@@ -74,7 +74,7 @@ public class Validator {
 			
 		}
 		
-		String dateOfBirth = userInfoCreateModel.getDateOfBirth();
+		String dateOfBirth = customerCreateModel.getDateOfBirth();
 		if (dateOfBirth == null || dateOfBirth.isEmpty()) {
 			
 			errorInformation.put(dateOfBirthField, dateOfBirthFieldIsRequiredMsg);
@@ -88,7 +88,7 @@ public class Validator {
 			
 		}
 		
-		String cellPhone = userInfoCreateModel.getCellPhone();
+		String cellPhone = customerCreateModel.getCellPhone();
 		if (cellPhone == null || cellPhone.isEmpty()) {
 			
 			errorInformation.put(cellPhoneField, cellPhoneFieldIsRequiredMsg);
@@ -102,7 +102,7 @@ public class Validator {
 			
 		}
 		
-		String email = userInfoCreateModel.getEmail();
+		String email = customerCreateModel.getEmail();
 		if (email == null || email.isEmpty()) {
 			
 			errorInformation.put(emailField, emailFieldIsRequiredMsg);
@@ -116,7 +116,7 @@ public class Validator {
 			
 		}
 		
-		String mailingAddress = userInfoCreateModel.getMailingAddress();
+		String mailingAddress = customerCreateModel.getMailingAddress();
 		if (mailingAddress == null || mailingAddress.isEmpty()) {
 			
 			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);
@@ -163,11 +163,11 @@ public class Validator {
 		}
 	}
 	
-	public void validateUserInfoUpdateModel(UserInfoUpdateModel userInfoUpdateModel) {
+	public void validateCustomerUpdateModel(CustomerUpdateModel customerUpdateModel) {
 		
 		HashMap<String, String> errorInformation = new HashMap<String, String>();
 		
-		String cellPhone = userInfoUpdateModel.getCellPhone();
+		String cellPhone = customerUpdateModel.getCellPhone();
 		if (cellPhone == null || cellPhone.isEmpty()) {
 			
 			errorInformation.put(cellPhoneField, cellPhoneFieldIsRequiredMsg);
@@ -181,7 +181,7 @@ public class Validator {
 			
 		}
 		
-		String email = userInfoUpdateModel.getEmail();
+		String email = customerUpdateModel.getEmail();
 		if (email == null || email.isEmpty()) {
 			
 			errorInformation.put(emailField, emailFieldIsRequiredMsg);
@@ -195,7 +195,7 @@ public class Validator {
 			
 		}
 		
-		String mailingAddress = userInfoUpdateModel.getMailingAddress();
+		String mailingAddress = customerUpdateModel.getMailingAddress();
 		if (mailingAddress == null || mailingAddress.isEmpty()) {
 			
 			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);

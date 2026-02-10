@@ -2,19 +2,19 @@ package com.poc.web.models;
 
 import java.util.HashSet;
 
-public class PageOfBankAccounts {
+public class PageModel<T> {
 	
-	private HashSet<BriefUserInfoReadModel> data;
+	private HashSet<T> data;
 	
 	private boolean firstPage;
 	
 	private boolean lastPage;
 
-	public HashSet<BriefUserInfoReadModel> getData() {
+	public HashSet<T> getData() {
 		return data;
 	}
 
-	public void setData(HashSet<BriefUserInfoReadModel> data) {
+	public void setData(HashSet<T> data) {
 		this.data = data;
 	}
 

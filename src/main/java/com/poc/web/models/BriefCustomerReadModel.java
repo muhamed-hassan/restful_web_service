@@ -2,7 +2,7 @@ package com.poc.web.models;
 
 import java.util.Objects;
 
-public class BriefUserInfoReadModel {
+public class BriefCustomerReadModel {
 	
 	private String name;
 
@@ -60,7 +60,7 @@ public class BriefUserInfoReadModel {
 		if (getClass() != object.getClass()) {
 			return false;
 		}
-		BriefUserInfoReadModel other = (BriefUserInfoReadModel) object;
+		BriefCustomerReadModel other = (BriefCustomerReadModel) object;
 		return nationalId == other.getNationalId();
 	}
 	

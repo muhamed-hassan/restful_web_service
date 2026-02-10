@@ -1,6 +1,6 @@
 package com.poc.web.models;
 
-public class UserInfoCreateModel extends UserInfoModel {
+public class CustomerCreateModel extends CustomerModel {
 
 	private String name;
 	

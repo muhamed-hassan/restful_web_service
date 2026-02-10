@@ -9,11 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Table(name = "user_info")
 @Entity
-public class UserInfo {
+public class Customer {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,7 +95,7 @@ public class UserInfo {
 		if (getClass() != object.getClass()) {
 			return false;
 		}
-		UserInfo other = (UserInfo) object;
+		Customer other = (Customer) object;
 		return id == other.getId();
 	}
 	

@@ -15,7 +15,7 @@ CREATE TABLE `iban_configs` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `user_info` (
+CREATE TABLE `customer` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(250) NOT NULL,
   `national_id` varchar(14) NOT NULL,

@@ -1,6 +1,6 @@
 package com.poc.web.models;
 
-public abstract class UserInfoModel {
+public abstract class CustomerModel {
 
 	private String cellPhone;
 	

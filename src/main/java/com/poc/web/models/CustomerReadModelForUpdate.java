@@ -1,6 +1,6 @@
 package com.poc.web.models;
 
-public class UserInfoReadModelForUpdate extends UserInfoModel {
+public class CustomerReadModelForUpdate extends CustomerModel {
 	
 	private int id;
 	

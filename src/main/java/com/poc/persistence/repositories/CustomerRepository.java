@@ -7,32 +7,32 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.poc.persistence.entities.Customer;
 import com.poc.persistence.entities.Page;
-import com.poc.persistence.entities.UserInfo;
 import com.poc.persistence.repositories.exceptions.DataNotFoundException;
-import com.poc.web.models.UserInfoUpdateModel;
+import com.poc.web.models.CustomerUpdateModel;
 
 @Repository
-public class UserInfoRepository extends BaseRepository {
+public class CustomerRepository extends BaseRepository {
 	
 	@Value("${page.size}")
     private int pageSize;
 	
-	public void save(UserInfo userInfo) {
+	public void save(Customer customer) {
 		
-		entityManager.persist(userInfo);
+		entityManager.persist(customer);
 	}
 	
 	public Object[] findBriefViewForUpdateByNationalId(String nationalId) {
 		
-		String query = "SELECT userInfo.id, userInfo.contactInfo.cellPhone, userInfo.contactInfo.email, userInfo.contactInfo.mailingAddress " + 
-					   "FROM   UserInfo userInfo " +
-					   "WHERE  userInfo.nationalId = :nationalId";
+		String query = "SELECT customer.id, customer.contactInfo.cellPhone, customer.contactInfo.email, customer.contactInfo.mailingAddress " + 
+					   "FROM   Customer customer " +
+					   "WHERE  customer.nationalId = :nationalId";
 		
-		Object[] rawUserInfo;
+		Object[] rawRecord;
 		try {
 			
-			rawUserInfo = entityManager.createQuery(query, Object[].class)
+			rawRecord = entityManager.createQuery(query, Object[].class)
 										.setParameter("nationalId", nationalId)
 										.getSingleResult();
 			
@@ -40,21 +40,21 @@ public class UserInfoRepository extends BaseRepository {
 			throw new DataNotFoundException();
 		}
 		
-		return rawUserInfo;
+		return rawRecord;
 	}
 	
 	public Object[] findDetailedViewByNationalId(String nationalId) {
 		
-		String query = "SELECT userInfo.id, userInfo.name, userInfo.nationalId, userInfo.dateOfBirth, " + 
-		               "       userInfo.contactInfo.cellPhone, userInfo.contactInfo.email, userInfo.contactInfo.mailingAddress, " + 
-				       "       userInfo.bankAccountInfo.accountNumber, userInfo.bankAccountInfo.balance " +
-					   "FROM   UserInfo userInfo " +
-					   "WHERE  userInfo.nationalId = :nationalId";
+		String query = "SELECT customer.id, customer.name, customer.nationalId, customer.dateOfBirth, " + 
+		               "       customer.contactInfo.cellPhone, customer.contactInfo.email, customer.contactInfo.mailingAddress, " + 
+				       "       customer.bankAccountInfo.accountNumber, customer.bankAccountInfo.balance " +
+					   "FROM   Customer customer " +
+					   "WHERE  customer.nationalId = :nationalId";
 		
-		Object[] rawUserInfo;
+		Object[] rawRecord;
 		try {
 			
-			rawUserInfo = entityManager.createQuery(query, Object[].class)
+			rawRecord = entityManager.createQuery(query, Object[].class)
 										.setParameter("nationalId", nationalId)
 										.getSingleResult();
 			
@@ -62,14 +62,14 @@ public class UserInfoRepository extends BaseRepository {
 			throw new DataNotFoundException();
 		}
 		
-		return rawUserInfo;
+		return rawRecord;
 	}
 
 	public Page findPage(int pageIndex) {
 		
-		String dataQuery = "SELECT userInfo.name, userInfo.nationalId, " + 
-		                   "       userInfo.bankAccountInfo.accountNumber, userInfo.bankAccountInfo.balance " +
-						   "FROM   UserInfo userInfo";
+		String dataQuery = "SELECT customer.name, customer.nationalId, " + 
+		                   "       customer.bankAccountInfo.accountNumber, customer.bankAccountInfo.balance " +
+						   "FROM   Customer customer";
 		
 		// pageIndex is zero based => will be translated to the index of the first requested element later
 		int firstElementIndex = pageIndex * pageSize;
@@ -83,7 +83,7 @@ public class UserInfoRepository extends BaseRepository {
 		}
 		
 		String countQuery = "SELECT COUNT(*) " + 
-		                    "FROM   UserInfo userInfo";
+		                    "FROM   Customer customer";
 		
 		long totalElements = entityManager.createQuery(countQuery, Long.class)
 											.getSingleResult();
@@ -100,13 +100,13 @@ public class UserInfoRepository extends BaseRepository {
 		return page;
 	}
 	
-	public void update(int id, UserInfoUpdateModel userInfoUpdateModel) {
+	public void update(int id, CustomerUpdateModel userInfoUpdateModel) {
 		
-		String updateStatement = "UPDATE UserInfo userInfo " + 
-								 "SET    userInfo.contactInfo.cellPhone = :cellPhoneParam, " + 
-				                 "       userInfo.contactInfo.email = :emailParam, " + 
-								 "       userInfo.contactInfo.mailingAddress = :mailingAddressParam " +
-								 "WHERE  userInfo.id = :idParam";
+		String updateStatement = "UPDATE Customer customer " + 
+								 "SET    customer.contactInfo.cellPhone = :cellPhoneParam, " + 
+				                 "       customer.contactInfo.email = :emailParam, " + 
+								 "       customer.contactInfo.mailingAddress = :mailingAddressParam " +
+								 "WHERE  customer.id = :idParam";
 
 		entityManager.createQuery(updateStatement)
 						.setParameter("cellPhoneParam", userInfoUpdateModel.getCellPhone())
@@ -118,8 +118,8 @@ public class UserInfoRepository extends BaseRepository {
 	
 	public void delete(int id) {
 		
-		String deleteStatement = "DELETE FROM UserInfo userInfo " + 
-				 				 "WHERE  userInfo.id = :idParam";
+		String deleteStatement = "DELETE FROM Customer customer " + 
+				 				 "WHERE  customer.id = :idParam";
 
 		entityManager.createQuery(deleteStatement)
 						.setParameter("idParam", id)
