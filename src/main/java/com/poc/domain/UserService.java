@@ -2,13 +2,10 @@ package com.poc.domain;
 
 import java.util.Random;
 
-import javax.persistence.NoResultException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.poc.domain.exceptions.DataNotFoundException;
 import com.poc.persistence.entities.IbanConfigs;
 import com.poc.persistence.entities.Page;
 import com.poc.persistence.entities.UserInfo;
@@ -41,28 +38,14 @@ public class UserService {
 	
 	public Object[] getBriefViewOfUserInfoForUpdateByNationalId(String nationalId) {
 		
-		Object[] rawUserInfo;
-		try {
-			
-			rawUserInfo = userInfoRepository.findBriefViewForUpdateByNationalId(nationalId);
-			
-		} catch (NoResultException e) {
-			throw new DataNotFoundException();
-		}	
+		Object[] rawUserInfo = userInfoRepository.findBriefViewForUpdateByNationalId(nationalId);
 		
 		return rawUserInfo;
 	}
 	
 	public Object[] getDetailedViewOfUserInfoByNationalId(String nationalId) {
 		
-		Object[] rawUserInfo;
-		try {
-			
-			rawUserInfo = userInfoRepository.findDetailedViewByNationalId(nationalId);
-			
-		} catch (NoResultException e) {
-			throw new DataNotFoundException();
-		}	
+		Object[] rawUserInfo = userInfoRepository.findDetailedViewByNationalId(nationalId);	
 		
 		return rawUserInfo;
 	}
@@ -70,10 +53,6 @@ public class UserService {
 	public Page getPageOfBankAccounts(int pageIndex) {
 				
 		Page page = userInfoRepository.findPage(pageIndex);
-		
-		if (page.getData().isEmpty()) {
-			throw new DataNotFoundException();
-		}
 
 		return page;
 	}
@@ -81,6 +60,7 @@ public class UserService {
 	public IbanConfigs getIbanConfigs() {
 		
 		IbanConfigs ibanConfigs = ibanConfigsRepository.findById(1);
+		
 		return ibanConfigs;
 	}
 

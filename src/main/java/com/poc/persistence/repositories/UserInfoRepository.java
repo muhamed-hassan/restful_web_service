@@ -2,11 +2,14 @@ package com.poc.persistence.repositories;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.poc.persistence.entities.Page;
 import com.poc.persistence.entities.UserInfo;
+import com.poc.persistence.repositories.exceptions.DataNotFoundException;
 import com.poc.web.models.UserInfoUpdateModel;
 
 @Repository
@@ -26,9 +29,16 @@ public class UserInfoRepository extends BaseRepository {
 					   "FROM   UserInfo userInfo " +
 					   "WHERE  userInfo.nationalId = :nationalId";
 		
-		Object[] rawUserInfo = entityManager.createQuery(query, Object[].class)
-											.setParameter("nationalId", nationalId)
-											.getSingleResult();
+		Object[] rawUserInfo;
+		try {
+			
+			rawUserInfo = entityManager.createQuery(query, Object[].class)
+										.setParameter("nationalId", nationalId)
+										.getSingleResult();
+			
+		} catch (NoResultException e) {
+			throw new DataNotFoundException();
+		}
 		
 		return rawUserInfo;
 	}
@@ -41,9 +51,16 @@ public class UserInfoRepository extends BaseRepository {
 					   "FROM   UserInfo userInfo " +
 					   "WHERE  userInfo.nationalId = :nationalId";
 		
-		Object[] rawUserInfo = entityManager.createQuery(query, Object[].class)
-											.setParameter("nationalId", nationalId)
-											.getSingleResult();
+		Object[] rawUserInfo;
+		try {
+			
+			rawUserInfo = entityManager.createQuery(query, Object[].class)
+										.setParameter("nationalId", nationalId)
+										.getSingleResult();
+			
+		} catch (NoResultException e) {
+			throw new DataNotFoundException();
+		}
 		
 		return rawUserInfo;
 	}
@@ -60,7 +77,10 @@ public class UserInfoRepository extends BaseRepository {
 		List<Object[]> rawData = entityManager.createQuery(dataQuery, Object[].class)
 												.setFirstResult(firstElementIndex)
 												.setMaxResults(pageSize)
-												.getResultList();
+												.getResultList();		
+		if (rawData.isEmpty()) {
+			throw new DataNotFoundException();
+		}
 		
 		String countQuery = "SELECT COUNT(*) " + 
 		                    "FROM   UserInfo userInfo";
@@ -75,7 +95,7 @@ public class UserInfoRepository extends BaseRepository {
 		Page page = new Page();
 		page.setData(rawData);
 		page.setFirstPage(isFirstPage);
-		page.setLastPage(isLastPage);		
+		page.setLastPage(isLastPage);
 		
 		return page;
 	}

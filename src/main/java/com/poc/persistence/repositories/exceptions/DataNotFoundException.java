@@ -1,4 +1,4 @@
-package com.poc.domain.exceptions;
+package com.poc.persistence.repositories.exceptions;
 
 public class DataNotFoundException extends RuntimeException {
 
