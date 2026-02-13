@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import app.domain.CustomerService;
@@ -25,6 +26,9 @@ import app.web.models.PageModel;
 @Component
 public class CustomerTransformer {
 	
+	@Value("${date.pattern}")
+    private String datePattern;
+	
 	@Autowired
 	private CustomerService customerService;
 	
@@ -34,7 +38,7 @@ public class CustomerTransformer {
 		customer.setName(customerCreateModel.getName());
 		customer.setNationalId(customerCreateModel.getNationalId());
 		try {			
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			DateFormat dateFormat = new SimpleDateFormat(datePattern);
 			customer.setDateOfBirth(dateFormat.parse(customerCreateModel.getDateOfBirth()));			
 		} catch (ParseException e) {}
 		
@@ -65,7 +69,7 @@ public class CustomerTransformer {
 		
 		IbanConfigs ibanConfigs = customerService.getIbanConfigs();
 		
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dateFormat = new SimpleDateFormat(datePattern);
 		
 		DetailedCustomerReadModel detailedCustomerReadModel = new DetailedCustomerReadModel();
 		detailedCustomerReadModel.setId((int) rawRecord[0]);
