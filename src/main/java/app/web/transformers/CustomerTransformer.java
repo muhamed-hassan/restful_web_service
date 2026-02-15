@@ -85,7 +85,7 @@ public class CustomerTransformer {
 		return detailedCustomerReadModel;
 	}
 	
-	public PageModel<BriefCustomerReadModel> toPageModel(Page page) {
+	public PageModel<BriefCustomerReadModel> toPageModel(Page<Object[]> page) {
 		
 		IbanConfigs ibanConfigs = customerService.getIbanConfigs();
 		

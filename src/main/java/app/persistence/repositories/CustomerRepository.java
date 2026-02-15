@@ -65,7 +65,7 @@ public class CustomerRepository extends BaseRepository {
 		return rawRecord;
 	}
 
-	public Page findPage(int pageIndex) {
+	public Page<Object[]> findPage(int pageIndex) {
 		
 		String dataQuery = "SELECT customer.name, customer.nationalId, " + 
 		                   "       customer.bankAccountInfo.accountNumber, customer.bankAccountInfo.balance " +
@@ -92,7 +92,7 @@ public class CustomerRepository extends BaseRepository {
 		boolean isFirstPage = (pageIndex == 0);
 		boolean isLastPage = ((pageIndex + 1) == totalPages);
 		
-		Page page = new Page();
+		Page<Object[]> page = new Page<Object[]>();
 		page.setData(rawData);
 		page.setFirstPage(isFirstPage);
 		page.setLastPage(isLastPage);

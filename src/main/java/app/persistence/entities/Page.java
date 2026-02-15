@@ -2,19 +2,19 @@ package app.persistence.entities;
 
 import java.util.List;
 
-public class Page {
+public class Page<T> {
 	
-	private List<Object[]> data;
+	private List<T> data;
 	
 	private boolean firstPage;
 	
 	private boolean lastPage;
 
-	public List<Object[]> getData() {
+	public List<T> getData() {
 		return data;
 	}
 
-	public void setData(List<Object[]> data) {
+	public void setData(List<T> data) {
 		this.data = data;
 	}
 

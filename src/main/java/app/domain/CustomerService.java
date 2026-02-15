@@ -50,9 +50,9 @@ public class CustomerService {
 		return rawRecord;
 	}
 	
-	public Page getPageOfCustomers(int pageIndex) {
+	public Page<Object[]> getPageOfCustomers(int pageIndex) {
 				
-		Page page = customerRepository.findPage(pageIndex);
+		Page<Object[]> page = customerRepository.findPage(pageIndex);
 
 		return page;
 	}	

@@ -74,7 +74,7 @@ public class CustomerController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<PageModel<BriefCustomerReadModel>> getPageOfCustomers(@RequestParam int pageIndex) {
 			
-		Page page = customerService.getPageOfCustomers(pageIndex);
+		Page<Object[]> page = customerService.getPageOfCustomers(pageIndex);
 		
 		PageModel<BriefCustomerReadModel> pageOfCustomers = customerTransformer.toPageModel(page);
 		
