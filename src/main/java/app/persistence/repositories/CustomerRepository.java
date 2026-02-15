@@ -27,13 +27,13 @@ public class CustomerRepository extends BaseRepository {
 		
 		String query = "SELECT customer.id, customer.contactInfo.cellPhone, customer.contactInfo.email, customer.contactInfo.mailingAddress " + 
 					   "FROM   Customer customer " +
-					   "WHERE  customer.nationalId = :nationalId";
+					   "WHERE  customer.nationalId = :nationalIdParam";
 		
 		Object[] rawRecord;
 		try {
 			
 			rawRecord = entityManager.createQuery(query, Object[].class)
-										.setParameter("nationalId", nationalId)
+										.setParameter("nationalIdParam", nationalId)
 										.getSingleResult();
 			
 		} catch (NoResultException e) {
@@ -49,13 +49,13 @@ public class CustomerRepository extends BaseRepository {
 		               "       customer.contactInfo.cellPhone, customer.contactInfo.email, customer.contactInfo.mailingAddress, " + 
 				       "       customer.bankAccountInfo.accountNumber, customer.bankAccountInfo.balance " +
 					   "FROM   Customer customer " +
-					   "WHERE  customer.nationalId = :nationalId";
+					   "WHERE  customer.nationalId = :nationalIdParam";
 		
 		Object[] rawRecord;
 		try {
 			
 			rawRecord = entityManager.createQuery(query, Object[].class)
-										.setParameter("nationalId", nationalId)
+										.setParameter("nationalIdParam", nationalId)
 										.getSingleResult();
 			
 		} catch (NoResultException e) {
