@@ -26,10 +26,10 @@ public class CustomerValidator {
 	private String dateOfBirthFieldValidationRegex = "((19[7-9][0-9])|(2[0-9][0-9][0-9]))-(0[1-9]|1[0-2])-(0[1-9]|([1-2][0-9])|3[0-1])";
 	private String dateOfBirthFieldIsInvalidMsg = "Date of birth contains invalid characters and shall be in the form of yyyy-MM-dd";
 	
-	private String cellPhoneField = "cellPhone";
-	private String cellPhoneFieldIsRequiredMsg = "Cell phone is required";
-	private String cellPhoneFieldValidationRegex = "(07)[0-9]{9}";
-	private String cellPhoneFieldIsInvalidMsg = "Cell phone contains invalid characters and shall be in this form 07123456789";
+	private String mobileField = "mobile";
+	private String mobileFieldIsRequiredMsg = "Mobile is required";
+	private String mobileFieldValidationRegex = "(07)[0-9]{9}";
+	private String mobileFieldIsInvalidMsg = "Mobile contains invalid characters and shall be in this form 07123456789";
 	
 	private String emailField = "email";
 	private String emailFieldIsRequiredMsg = "Email is required";
@@ -47,91 +47,66 @@ public class CustomerValidator {
 		HashMap<String, String> errorInformation = new HashMap<String, String>();
 		
 		String name = customerCreateModel.getName();
-		if (name == null || name.isEmpty()) {
-			
-			errorInformation.put(nameField, nameFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (name == null || name.isEmpty()) {			
+			errorInformation.put(nameField, nameFieldIsRequiredMsg);			
+		} else {			
 			name = name.trim();
 			if (!name.matches(nameFieldValidationRegex)) {
 				errorInformation.put(nameField, nameFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
 		String nationalId = customerCreateModel.getNationalId();
-		if (nationalId == null || nationalId.isEmpty()) {
-			
-			errorInformation.put(nationalIdField, nationalIdFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (nationalId == null || nationalId.isEmpty()) {			
+			errorInformation.put(nationalIdField, nationalIdFieldIsRequiredMsg);			
+		} else {			
 			nationalId = nationalId.trim();
 			if (!nationalId.matches(nationalIdFieldValidationRegex)) {
 				errorInformation.put(nationalIdField, nationalIdFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
 		String dateOfBirth = customerCreateModel.getDateOfBirth();
-		if (dateOfBirth == null || dateOfBirth.isEmpty()) {
-			
-			errorInformation.put(dateOfBirthField, dateOfBirthFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (dateOfBirth == null || dateOfBirth.isEmpty()) {			
+			errorInformation.put(dateOfBirthField, dateOfBirthFieldIsRequiredMsg);			
+		} else {			
 			dateOfBirth = dateOfBirth.trim();
 			if (!dateOfBirth.matches(dateOfBirthFieldValidationRegex)) {
 				errorInformation.put(dateOfBirthField, dateOfBirthFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
-		String cellPhone = customerCreateModel.getCellPhone();
-		if (cellPhone == null || cellPhone.isEmpty()) {
-			
-			errorInformation.put(cellPhoneField, cellPhoneFieldIsRequiredMsg);
-			
-		} else {
-			
-			cellPhone = cellPhone.trim();
-			if (!cellPhone.matches(cellPhoneFieldValidationRegex)) {
-				errorInformation.put(cellPhoneField, cellPhoneFieldIsInvalidMsg);
-			}
-			
+		String mobile = customerCreateModel.getMobile();
+		if (mobile == null || mobile.isEmpty()) {			
+			errorInformation.put(mobileField, mobileFieldIsRequiredMsg);			
+		} else {			
+			mobile = mobile.trim();
+			if (!mobile.matches(mobileFieldValidationRegex)) {
+				errorInformation.put(mobileField, mobileFieldIsInvalidMsg);
+			}			
 		}
 		
 		String email = customerCreateModel.getEmail();
-		if (email == null || email.isEmpty()) {
-			
-			errorInformation.put(emailField, emailFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (email == null || email.isEmpty()) {			
+			errorInformation.put(emailField, emailFieldIsRequiredMsg);			
+		} else {			
 			email = email.trim();
 			if (!email.matches(emailFieldValidationRegex)) {
 				errorInformation.put(emailField, emailFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
 		String mailingAddress = customerCreateModel.getMailingAddress();
-		if (mailingAddress == null || mailingAddress.isEmpty()) {
-			
-			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (mailingAddress == null || mailingAddress.isEmpty()) {			
+			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);			
+		} else {			
 			mailingAddress = mailingAddress.trim();
 			if (!mailingAddress.matches(mailingAddressFieldValidationRegex)) {
 				errorInformation.put(mailingAddressField, mailingAddressFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
-		if (!errorInformation.isEmpty()) {
-			
+		if (!errorInformation.isEmpty()) {			
 			WebValidationException webValidationException = new WebValidationException();
 			webValidationException.setErrorInformation(errorInformation);
 			throw webValidationException;
@@ -142,21 +117,16 @@ public class CustomerValidator {
 		
 		HashMap<String, String> errorInformation = new HashMap<String, String>();
 		
-		if (nationalId.equals("0")) {
-			
-			errorInformation.put(nationalIdField, nationalIdFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (nationalId.equals("0")) {			
+			errorInformation.put(nationalIdField, nationalIdFieldIsRequiredMsg);			
+		} else {			
 			nationalId = nationalId.trim();
 			if (!nationalId.matches(nationalIdFieldValidationRegex)) {
 				errorInformation.put(nationalIdField, nationalIdFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
-		if (!errorInformation.isEmpty()) {
-			
+		if (!errorInformation.isEmpty()) {			
 			WebValidationException webValidationException = new WebValidationException();
 			webValidationException.setErrorInformation(errorInformation);
 			throw webValidationException;
@@ -167,50 +137,37 @@ public class CustomerValidator {
 		
 		HashMap<String, String> errorInformation = new HashMap<String, String>();
 		
-		String cellPhone = customerUpdateModel.getCellPhone();
-		if (cellPhone == null || cellPhone.isEmpty()) {
-			
-			errorInformation.put(cellPhoneField, cellPhoneFieldIsRequiredMsg);
-			
-		} else {
-			
-			cellPhone = cellPhone.trim();
-			if (!cellPhone.matches(cellPhoneFieldValidationRegex)) {
-				errorInformation.put(cellPhoneField, cellPhoneFieldIsInvalidMsg);
-			}
-			
+		String mobile = customerUpdateModel.getMobile();
+		if (mobile == null || mobile.isEmpty()) {			
+			errorInformation.put(mobileField, mobileFieldIsRequiredMsg);			
+		} else {			
+			mobile = mobile.trim();
+			if (!mobile.matches(mobileFieldValidationRegex)) {
+				errorInformation.put(mobileField, mobileFieldIsInvalidMsg);
+			}			
 		}
 		
 		String email = customerUpdateModel.getEmail();
-		if (email == null || email.isEmpty()) {
-			
-			errorInformation.put(emailField, emailFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (email == null || email.isEmpty()) {			
+			errorInformation.put(emailField, emailFieldIsRequiredMsg);			
+		} else {			
 			email = email.trim();
 			if (!email.matches(emailFieldValidationRegex)) {
 				errorInformation.put(emailField, emailFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
 		String mailingAddress = customerUpdateModel.getMailingAddress();
-		if (mailingAddress == null || mailingAddress.isEmpty()) {
-			
-			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);
-			
-		} else {
-			
+		if (mailingAddress == null || mailingAddress.isEmpty()) {			
+			errorInformation.put(mailingAddressField, mailingAddressFieldIsRequiredMsg);			
+		} else {			
 			mailingAddress = mailingAddress.trim();
 			if (!mailingAddress.matches(mailingAddressFieldValidationRegex)) {
 				errorInformation.put(mailingAddressField, mailingAddressFieldIsInvalidMsg);
-			}
-			
+			}			
 		}
 		
-		if (!errorInformation.isEmpty()) {
-			
+		if (!errorInformation.isEmpty()) {			
 			WebValidationException webValidationException = new WebValidationException();
 			webValidationException.setErrorInformation(errorInformation);
 			throw webValidationException;

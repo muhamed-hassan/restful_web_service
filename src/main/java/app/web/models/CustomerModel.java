@@ -2,18 +2,18 @@ package app.web.models;
 
 public abstract class CustomerModel {
 
-	private String cellPhone;
+	private String mobile;
 	
 	private String email;
 	
 	private String mailingAddress;
 
-	public String getCellPhone() {
-		return cellPhone;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getEmail() {

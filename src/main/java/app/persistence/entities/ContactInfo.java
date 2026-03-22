@@ -6,20 +6,19 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class ContactInfo {
 	
-	@Column(name = "cell_phone")
-	private String cellPhone;
+	private String mobile;
 		
 	private String email;
 	
 	@Column(name = "mailing_address")
 	private String mailingAddress;
 
-	public String getCellPhone() {
-		return cellPhone;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getEmail() {

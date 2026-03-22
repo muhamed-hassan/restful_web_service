@@ -25,7 +25,7 @@ public class CustomerRepository extends BaseRepository {
 	
 	public Object[] findBriefViewForUpdateByNationalId(String nationalId) {
 		
-		String query = "SELECT customer.id, customer.contactInfo.cellPhone, customer.contactInfo.email, customer.contactInfo.mailingAddress " + 
+		String query = "SELECT customer.id, customer.contactInfo.mobile, customer.contactInfo.email, customer.contactInfo.mailingAddress " + 
 					   "FROM   Customer customer " +
 					   "WHERE  customer.nationalId = :nationalIdParam";
 		
@@ -46,7 +46,7 @@ public class CustomerRepository extends BaseRepository {
 	public Object[] findDetailedViewByNationalId(String nationalId) {
 		
 		String query = "SELECT customer.id, customer.name, customer.nationalId, customer.dateOfBirth, " + 
-		               "       customer.contactInfo.cellPhone, customer.contactInfo.email, customer.contactInfo.mailingAddress, " + 
+		               "       customer.contactInfo.mobile, customer.contactInfo.email, customer.contactInfo.mailingAddress, " + 
 				       "       customer.bankAccountInfo.accountNumber, customer.bankAccountInfo.balance " +
 					   "FROM   Customer customer " +
 					   "WHERE  customer.nationalId = :nationalIdParam";
@@ -103,13 +103,13 @@ public class CustomerRepository extends BaseRepository {
 	public void update(int id, CustomerUpdateModel userInfoUpdateModel) {
 		
 		String updateStatement = "UPDATE Customer customer " + 
-								 "SET    customer.contactInfo.cellPhone = :cellPhoneParam, " + 
+								 "SET    customer.contactInfo.mobile = :mobileParam, " + 
 				                 "       customer.contactInfo.email = :emailParam, " + 
 								 "       customer.contactInfo.mailingAddress = :mailingAddressParam " +
 								 "WHERE  customer.id = :idParam";
 
 		entityManager.createQuery(updateStatement)
-						.setParameter("cellPhoneParam", userInfoUpdateModel.getCellPhone())
+						.setParameter("mobileParam", userInfoUpdateModel.getMobile())
 						.setParameter("emailParam", userInfoUpdateModel.getEmail())
 						.setParameter("mailingAddressParam", userInfoUpdateModel.getMailingAddress())
 						.setParameter("idParam", id)

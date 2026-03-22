@@ -43,7 +43,7 @@ public class CustomerTransformer {
 		} catch (ParseException e) {}
 		
 		ContactInfo contactInfo = new ContactInfo();
-		contactInfo.setCellPhone(customerCreateModel.getCellPhone());		
+		contactInfo.setMobile(customerCreateModel.getMobile());		
 		contactInfo.setEmail(customerCreateModel.getEmail());
 		contactInfo.setMailingAddress(customerCreateModel.getMailingAddress());
 		customer.setContactInfo(contactInfo);
@@ -58,7 +58,7 @@ public class CustomerTransformer {
 		
 		CustomerReadModelForUpdate customerReadModelForUpdate = new CustomerReadModelForUpdate();	
         customerReadModelForUpdate.setId((int) rawRecord[0]);
-        customerReadModelForUpdate.setCellPhone((String) rawRecord[1]);
+        customerReadModelForUpdate.setMobile((String) rawRecord[1]);
         customerReadModelForUpdate.setEmail((String) rawRecord[2]);
         customerReadModelForUpdate.setMailingAddress((String) rawRecord[3]);
         
@@ -76,7 +76,7 @@ public class CustomerTransformer {
 		detailedCustomerReadModel.setName((String) rawRecord[1]);		
 		detailedCustomerReadModel.setNationalId((String) rawRecord[2]);
 		detailedCustomerReadModel.setDateOfBirth(dateFormat.format((Date) rawRecord[3]));	
-		detailedCustomerReadModel.setCellPhone((String) rawRecord[4]);
+		detailedCustomerReadModel.setMobile((String) rawRecord[4]);
 		detailedCustomerReadModel.setEmail((String) rawRecord[5]);
 		detailedCustomerReadModel.setMailingAddress((String) rawRecord[6]);		
 		detailedCustomerReadModel.setIban(toIban(ibanConfigs, (String) rawRecord[7]));
