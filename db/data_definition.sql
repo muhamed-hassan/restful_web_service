@@ -28,6 +28,6 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `national_id_UQ` (`national_id`),
   UNIQUE KEY `mobile_UQ` (`mobile`),
-  UNIQUE KEY `account_number_UQ` (`account_number`),
-  UNIQUE KEY `email_UQ` (`email`)
+  UNIQUE KEY `email_UQ` (`email`),
+  UNIQUE KEY `account_number_UQ` (`account_number`)
 );
