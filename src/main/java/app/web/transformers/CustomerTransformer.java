@@ -15,7 +15,7 @@ import app.domain.CustomerService;
 import app.persistence.entities.BankAccountInfo;
 import app.persistence.entities.ContactInfo;
 import app.persistence.entities.Customer;
-import app.persistence.entities.IbanConfigs;
+import app.persistence.entities.IbanConfiguration;
 import app.persistence.entities.Page;
 import app.web.models.BriefCustomerReadModel;
 import app.web.models.CustomerCreateModel;
@@ -67,7 +67,7 @@ public class CustomerTransformer {
 	
 	public DetailedCustomerReadModel toDetailedCustomerReadModel(Object[] rawRecord) {
 		
-		IbanConfigs ibanConfigs = customerService.getIbanConfigs();
+		IbanConfiguration ibanConfigs = customerService.getIbanConfigs();
 		
 		DateFormat dateFormat = new SimpleDateFormat(datePattern);
 		
@@ -87,7 +87,7 @@ public class CustomerTransformer {
 	
 	public PageModel<BriefCustomerReadModel> toPageModel(Page<Object[]> page) {
 		
-		IbanConfigs ibanConfigs = customerService.getIbanConfigs();
+		IbanConfiguration ibanConfigs = customerService.getIbanConfigs();
 		
 		List<Object[]> rawData = page.getData();
 		HashSet<BriefCustomerReadModel> briefCustomerReadModels = new HashSet<BriefCustomerReadModel>();
@@ -114,10 +114,10 @@ public class CustomerTransformer {
 
 	/* *************************************************************************************************** */
 	
-	private String toIban(IbanConfigs ibanConfigs, String accountNumber) {
+	private String toIban(IbanConfiguration ibanConfiguration, String accountNumber) {
 		
-		return ibanConfigs.getCountryCode() + ibanConfigs.getCheckDigits() + ibanConfigs.getBankCode() + 
-				ibanConfigs.getSortCode() + accountNumber;
+		return ibanConfiguration.getCountryCode() + ibanConfiguration.getCheckDigits() + 
+				ibanConfiguration.getBankCode() + ibanConfiguration.getSortCode() + accountNumber;
 	}
 	
 }

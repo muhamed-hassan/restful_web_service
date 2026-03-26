@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.persistence.entities.Customer;
-import app.persistence.entities.IbanConfigs;
+import app.persistence.entities.IbanConfiguration;
 import app.persistence.entities.Page;
 import app.persistence.repositories.CustomerRepository;
-import app.persistence.repositories.IbanConfigsRepository;
+import app.persistence.repositories.IbanConfigurationRepository;
 import app.web.models.CustomerUpdateModel;
 
 @Service
@@ -20,7 +20,7 @@ public class CustomerService {
 	private CustomerRepository customerRepository;
 	
 	@Autowired
-	private IbanConfigsRepository ibanConfigsRepository;
+	private IbanConfigurationRepository ibanConfigsRepository;
 	
 	@Transactional
 	public void openBankAccount(Customer customer) {
@@ -52,7 +52,7 @@ public class CustomerService {
 	
 	public Page<Object[]> getPageOfCustomers(int pageIndex) {
 				
-		Page<Object[]> page = customerRepository.findPage(pageIndex);
+		Page<Object[]> page = customerRepository.findByPage(pageIndex);
 
 		return page;
 	}	
@@ -69,9 +69,9 @@ public class CustomerService {
 		customerRepository.delete(id);
 	}
 	
-	public IbanConfigs getIbanConfigs() {
+	public IbanConfiguration getIbanConfigs() {
 		
-		IbanConfigs ibanConfigs = ibanConfigsRepository.findById(1);
+		IbanConfiguration ibanConfigs = ibanConfigsRepository.findById(1);
 		
 		return ibanConfigs;
 	}

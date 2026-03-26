@@ -7,9 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "iban_configs")
+@Table(name = "iban_configuration")
 @Entity
-public class IbanConfigs {
+public class IbanConfiguration {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

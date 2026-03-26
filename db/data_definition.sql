@@ -6,7 +6,7 @@ USE bank_crud_example;
 /* ********************************************************************************************************* */
 /* ********************************************************************************************************* */
 
-CREATE TABLE `iban_configs` (
+CREATE TABLE `iban_configuration` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `country_code` CHAR(2) NOT NULL,
   `check_digits` CHAR(2) NOT NULL,

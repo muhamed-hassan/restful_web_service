@@ -65,7 +65,7 @@ public class CustomerRepository extends BaseRepository {
 		return rawRecord;
 	}
 
-	public Page<Object[]> findPage(int pageIndex) {
+	public Page<Object[]> findByPage(int pageIndex) {
 		
 		String dataQuery = "SELECT customer.name, customer.nationalId, " + 
 		                   "       customer.bankAccountInfo.accountNumber, customer.bankAccountInfo.balance " +
@@ -100,7 +100,7 @@ public class CustomerRepository extends BaseRepository {
 		return page;
 	}
 	
-	public void update(int id, CustomerUpdateModel userInfoUpdateModel) {
+	public void update(int id, CustomerUpdateModel customerUpdateModel) {
 		
 		String updateStatement = "UPDATE Customer customer " + 
 								 "SET    customer.contactInfo.mobile = :mobileParam, " + 
@@ -109,9 +109,9 @@ public class CustomerRepository extends BaseRepository {
 								 "WHERE  customer.id = :idParam";
 
 		entityManager.createQuery(updateStatement)
-						.setParameter("mobileParam", userInfoUpdateModel.getMobile())
-						.setParameter("emailParam", userInfoUpdateModel.getEmail())
-						.setParameter("mailingAddressParam", userInfoUpdateModel.getMailingAddress())
+						.setParameter("mobileParam", customerUpdateModel.getMobile())
+						.setParameter("emailParam", customerUpdateModel.getEmail())
+						.setParameter("mailingAddressParam", customerUpdateModel.getMailingAddress())
 						.setParameter("idParam", id)
 						.executeUpdate();
 	}
